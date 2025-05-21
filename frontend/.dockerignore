@@ -1,0 +1,14 @@
+# ビルド不要なファイル
+node_modules
+dist
+.env
+*.log
+
+# OS・エディタ関連
+.DS_Store
+.vscode
+.idea
+
+#Git関連ファイル
+.git
+.gitignore
