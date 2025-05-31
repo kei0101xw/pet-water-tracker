@@ -19,7 +19,6 @@ const PetSchema = new mongoose.Schema({
   weightKg: {
     type: Number,
     required: true,
-    trim: true,
   },
   birthdate: {
     type: Date,
