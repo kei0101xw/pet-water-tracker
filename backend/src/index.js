@@ -1,13 +1,14 @@
 const express = require("express");
 const app = express();
+const taskRoute = require("./routes/tasks");
 const connectDB = require("./config/connect");
 require("dotenv").config();
 
+app.use(express.json());
+
 const PORT = process.env.PORT;
 
-app.get("/", (req, res) => {
-  res.send("Hello from backend!");
-});
+app.use("/api/v1/", taskRoute);
 
 //データベースと接続
 const start = async () => {
