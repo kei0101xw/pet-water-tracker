@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
-const taskRoute = require("./routes/tasks");
+const petRoute = require("./routes/pets");
+const authRoute = require("./routes/auth");
+const userRoute = require("./routes/users");
+const waterBowlRoute = require("./routes/waterBowl");
+const waterLogRoute = require("./routes/waterLog");
 const connectDB = require("./config/connect");
 require("dotenv").config();
 
@@ -8,7 +12,11 @@ app.use(express.json());
 
 const PORT = process.env.PORT;
 
-app.use("/api/v1/", taskRoute);
+app.use("/api/v1/pets", petRoute);
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/users", userRoute);
+app.use("/api/v1/water-bowl", waterBowlRoute);
+app.use("/api/v1/water-log", waterLogRoute);
 
 //データベースと接続
 const start = async () => {
