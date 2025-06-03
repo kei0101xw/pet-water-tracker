@@ -6,7 +6,7 @@ const saltRounds = 10;
 //後でJWT認証を使ってトークンを検証するようにする
 const updateUser = async (req, res) => {
   try {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
+    if (req.user.id === req.params.id || req.user.isAdmin) {
       try {
         const user = await User.findByIdAndUpdate(req.params.id, {
           $set: req.body,
@@ -26,7 +26,7 @@ const updateUser = async (req, res) => {
 //ユーザーの削除
 const deleteUser = async (req, res) => {
   try {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
+    if (req.user.id === req.params.id || req.user.isAdmin) {
       try {
         const user = await User.findByIdAndDelete(req.params.id);
         res.status(200).json("ユーザー情報が削除されました");
