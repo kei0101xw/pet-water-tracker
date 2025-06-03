@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const verifyToken = require("../middleware/verifyToken");
 const {
   createPet,
   getPet,
@@ -7,12 +8,12 @@ const {
   deletePet,
 } = require("../controllers/pets");
 
-router.post("/pets", createPet);
+router.post("/", verifyToken, createPet);
 
-router.get("/pets", getPet);
+router.get("/:id", verifyToken, getPet);
 
-router.patch("/pets", updatePet);
+router.put("/:id", verifyToken, updatePet);
 
-router.delete("/pets", deletePet);
+router.delete("/:id", verifyToken, deletePet);
 
 module.exports = router;
