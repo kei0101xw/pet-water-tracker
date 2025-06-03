@@ -3,6 +3,11 @@ const WaterBowl = require("../models/WaterBowl");
 //水入れの登録
 const createWaterBowl = async (req, res) => {
   try {
+    const existingBowl = await WaterBowl.findOne({ userId: req.user.id });
+    if (existingBowl) {
+      return res.status(400).json("既に水入れ皿が登録されています");
+    }
+
     const newWaterBowl = await WaterBowl.create({
       ...req.body,
       userId: req.user.id, //トークンからのIDを使用
