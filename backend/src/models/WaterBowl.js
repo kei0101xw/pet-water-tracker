@@ -17,7 +17,6 @@ const WaterLogSchema = new mongoose.Schema({
   waterLevel: {
     type: Number, // ml単位
     default: 0, //登録時は水の量を0として記録
-    required: true,
   },
   waterDrank: {
     // 前回からの差分（ml）
