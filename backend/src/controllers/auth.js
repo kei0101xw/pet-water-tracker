@@ -1,6 +1,20 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const saltRounds = 10;
+
+// トークン生成
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+      isAdmin: user.isAdmin || false,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN }
+  );
+};
 
 const createUser = async (req, res) => {
   try {
@@ -10,7 +24,16 @@ const createUser = async (req, res) => {
       ...req.body,
       password: hashedPassword,
     });
-    res.status(200).json(newUser);
+
+    const token = generateToken(newUser);
+    res.status(200).json({
+      message: "ユーザー登録完了",
+      user: {
+        id: newUser._id,
+        email: newUser.email,
+      },
+      token: token,
+    });
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
@@ -28,7 +51,16 @@ const loginUser = async (req, res) => {
     );
     if (!validPassword) return res.status(400).json("パスワードが違います");
 
-    return res.status(200).json(user);
+    const token = generateToken(user);
+
+    return res.status(200).json({
+      message: "ログイン成功",
+      user: {
+        id: user._id,
+        email: user.email,
+      },
+      token: token,
+    });
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
