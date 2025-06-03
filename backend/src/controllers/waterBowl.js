@@ -3,7 +3,10 @@ const WaterBowl = require("../models/WaterBowl");
 //水入れの登録
 const createWaterBowl = async (req, res) => {
   try {
-    const newWaterBowl = await WaterBowl.create(req.body);
+    const newWaterBowl = await WaterBowl.create({
+      ...req.body,
+      userId: req.user.id, //トークンからのIDを使用
+    });
     res.status(200).json(newWaterBowl);
   } catch (err) {
     res.status(500).json(err);
@@ -14,11 +17,14 @@ const createWaterBowl = async (req, res) => {
 //水入れ情報の取得
 const getWaterBowl = async (req, res) => {
   try {
-    const waterBowl = await WaterBowl.findOne({ userId: req.params.userId });
-    if (!waterBowl) {
-      return res.status(404).json("水入れが見つかりませんでした");
+    const bowl = await WaterBowl.findById(req.params.id);
+    if (!bowl) return res.status(404).json("水入れが見つかりません");
+
+    //所有者チェック
+    if (bowl.userId.toString() !== req.user.id && !req.user.isAdmin) {
+      return res.status(403).json("あなたはこの操作を許可されていません");
     }
-    res.status(200).json(waterBowl);
+    res.status(200).json(bowl);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -27,78 +33,62 @@ const getWaterBowl = async (req, res) => {
 //水入れの更新
 const updateBowlWeight = async (req, res) => {
   try {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
-      try {
-        const updatedBowl = await WaterBowl.findByIdAndUpdate(
-          req.params.id,
-          {
-            $set: {
-              bowlWeight: req.body.bowlWeight,
-            },
-          },
-          { new: true }
-        );
+    const bowl = await WaterBowl.findById(req.params.id);
+    if (!bowl) return res.status(404).json("水入れが見つかりません");
 
-        if (!updatedBowl) {
-          return res.status(404).json("該当する水入れが見つかりません");
-        }
-
-        res.status(200).json("水入れの重量が更新されました");
-      } catch (err) {
-        return res.status(500).json(err);
-      }
-    } else {
+    //所有者チェック
+    if (bowl.userId.toString() !== req.user.id && !req.user.isAdmin) {
       return res.status(403).json("あなたはこの操作を許可されていません");
     }
+
+    const updatedBowl = await WaterBowl.findByIdAndUpdate(
+      req.params.id,
+      { $set: { bowlWeight: req.body.bowlWeight } },
+      { new: true }
+    );
+
+    res.status(200).json("水入れの重量が更新されました");
   } catch (err) {
-    return res.status(500).json("サーバーエラーが発生しました");
+    res.status(500).json("サーバーエラーが発生しました");
   }
 };
 
 //現在の水の量の更新
 const updateWaterLevel = async (req, res) => {
   try {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
-      try {
-        const updatedBowl = await WaterBowl.findByIdAndUpdate(
-          req.params.id,
-          {
-            $set: {
-              waterLevel: req.body.waterLevel,
-            },
-          },
-          { new: true }
-        );
+    const bowl = await WaterBowl.findById(req.params.id);
+    if (!bowl) return res.status(404).json("水入れが見つかりません");
 
-        if (!updatedBowl) {
-          return res.status(404).json("該当する水入れが見つかりません");
-        }
-
-        res.status(200).json("水量が更新されました");
-      } catch (err) {
-        return res.status(500).json(err);
-      }
-    } else {
+    //所有者チェック
+    if (bowl.userId.toString() !== req.user.id && !req.user.isAdmin) {
       return res.status(403).json("あなたはこの操作を許可されていません");
     }
+
+    const updatedBowl = await WaterBowl.findByIdAndUpdate(
+      req.params.id,
+      { $set: { waterLevel: req.body.waterLevel } },
+      { new: true }
+    );
+
+    res.status(200).json("水量が更新されました");
   } catch (err) {
-    return res.status(500).json("サーバーエラーが発生しました");
+    res.status(500).json("サーバーエラーが発生しました");
   }
 };
 
 //水入れの削除
 const deleteBowl = async (req, res) => {
   try {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
-      try {
-        const user = await WaterBowl.findByIdAndDelete(req.params.id);
-        res.status(200).json("水入れが削除されました");
-      } catch (err) {
-        return res.status(500).json(err);
-      }
-    } else {
+    const bowl = await WaterBowl.findById(req.params.id);
+    if (!bowl) return res.status(404).json("水入れが見つかりません");
+
+    //所有者チェック
+    if (bowl.userId.toString() !== req.user.id && !req.user.isAdmin) {
       return res.status(403).json("あなたはこの操作を許可されていません");
     }
+
+    const deletedBowl = await WaterBowl.findByIdAndDelete(req.params.id);
+    res.status(200).json("水入れが削除されました");
   } catch (err) {
     return res.status(500).json("サーバーエラーが発生しました");
   }
