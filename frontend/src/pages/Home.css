@@ -1,0 +1,36 @@
+.home-container {
+  padding: 1rem;
+  font-family: sans-serif;
+}
+
+.home-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  color: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.nav-button.blue {
+  background-color: #3b82f6;
+}
+
+.nav-button.green {
+  background-color: #10b981;
+}
+
+.nav-button.purple {
+  background-color: #8b5cf6;
+}
