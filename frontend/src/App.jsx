@@ -7,6 +7,8 @@ import Detail from "./pages/Detail";
 import Setting from "./pages/Setting";
 import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
+import Details from "./pages/Details";
+import PetDetail from "./pages/PetDetail";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/detail" element={<Detail />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/details" element={<Details />} />
+          <Route path="/details/:id" element={<PetDetail />} />
         </Routes>
       </div>
     </>
