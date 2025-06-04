@@ -1,0 +1,15 @@
+.pet-detail-container {
+  padding: 1rem;
+}
+
+.pet-detail-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.pet-info {
+  font-size: 1.1rem;
+  list-style: none;
+  padding-left: 0;
+}
