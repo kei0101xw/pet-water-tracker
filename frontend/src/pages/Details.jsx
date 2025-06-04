@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { petList } from "./pages/petData";
+import { petList } from "./PetData";
 import "./Details.css";
 
 const Details = () => {
