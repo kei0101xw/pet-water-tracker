@@ -17,7 +17,7 @@ const Home = () => {
           分析
         </button>
         <button
-          onClick={() => navigate("/detail")}
+          onClick={() => navigate("/details")}
           className="nav-button green"
         >
           ○○くんの情報
