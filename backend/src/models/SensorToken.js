@@ -16,6 +16,10 @@ const SensorTokenSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   issuedAt: {
     type: Date,
     default: Date.now,
