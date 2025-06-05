@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Pet = require("../models/Pet");
+const SensorToken = require("../models/SensorToken");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
@@ -67,7 +69,61 @@ const loginUser = async (req, res) => {
   }
 };
 
+//センサ用のトークン発行
+const generateSensorToken = async (req, res) => {
+  try {
+    const { petId } = req.body;
+
+    const pet = await Pet.findById(petId);
+    if (!pet || pet.userId.toString() !== req.user.id) {
+      return res.status(403).json("あなたのペットではありません");
+    }
+
+    // 既存のセンサートークンを検索
+    const existingToken = await SensorToken.findOne({
+      userId: req.user.id,
+      petId: pet._id,
+      isValid: true, // 無効化されていない
+    });
+
+    if (existingToken) {
+      return res.status(200).json({
+        message: "水飲み皿用トークンは1ユーザーにつき1回までです。",
+        token: existingToken.token,
+      });
+    }
+
+    // 新しいトークンを作成
+    const token = jwt.sign(
+      {
+        userId: req.user.id,
+        petId: pet._id,
+        isSensor: true,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "10y" }
+    );
+
+    const now = new Date();
+
+    // DBに保存
+    await SensorToken.create({
+      userId: req.user.id,
+      petId: pet._id,
+      token,
+      issuedAt: now,
+      isValid: true,
+    });
+
+    res.status(200).json({ token });
+  } catch (err) {
+    console.error("センサトークン生成エラー:", err);
+    res.status(500).json("センサトークンの生成に失敗しました");
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
+  generateSensorToken,
 };

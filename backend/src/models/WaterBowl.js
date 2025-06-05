@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const WaterLogSchema = new mongoose.Schema({
+const WaterBowlSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -10,19 +10,26 @@ const WaterLogSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  allWeight: {
+    type: Number,
+    default: null,
+  },
   bowlWeight: {
-    type: Number, // g単位
+    type: Number,
     required: true,
   },
   waterLevel: {
-    type: Number, // ml単位
-    default: 0, //登録時は水の量を0として記録
-  },
-  waterDrank: {
-    // 前回からの差分（ml）
     type: Number,
-    default: 0,
+    default: null,
+  },
+  lastWeight: {
+    type: Number,
+    default: null,
+  },
+  lastUpdated: {
+    type: Date,
+    default: null,
   },
 });
 
-module.exports = mongoose.model("WaterLog", WaterLogSchema);
+module.exports = mongoose.model("WaterBowl", WaterBowlSchema);
