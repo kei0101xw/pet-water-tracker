@@ -55,6 +55,15 @@ const UserSetting = () => {
             onChange={handleChange}
           />
         </label>
+        <label>
+          パスワード:
+          <input
+            type="password"
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+          />
+        </label>
         <button type="submit" className="user-setting-save">
           保存
         </button>
