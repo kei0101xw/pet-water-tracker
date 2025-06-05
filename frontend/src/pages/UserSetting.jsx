@@ -65,7 +65,7 @@ const UserSetting = () => {
           />
         </label>
         <button type="submit" className="user-setting-save">
-          保存
+          確認
         </button>
         <button
           type="button"
