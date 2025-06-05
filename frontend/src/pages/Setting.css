@@ -1,0 +1,32 @@
+.setting-container {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.setting-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.setting-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.setting-button {
+  padding: 0.75rem 2rem;
+  font-size: 1.2rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.setting-button:hover {
+  background-color: #45a049;
+}
