@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./UserSetting.css";
 
 const UserSetting = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({
     username: "",
     email: "",
     password: "",
   });
+
+  // 戻ってきたときに state から値を復元
+  useEffect(() => {
+    if (location.state?.user) {
+      setUser(location.state.user);
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +30,7 @@ const UserSetting = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // ここでAPIに送信するなどの処理を追加予定
-    alert(`ユーザー情報を保存しました: ${user.username} / ${user.email}`);
+    navigate("/confirm/user", { state: { user } });
   };
 
   return (
@@ -44,8 +55,24 @@ const UserSetting = () => {
             onChange={handleChange}
           />
         </label>
+        <label>
+          パスワード:
+          <input
+            type="password"
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+          />
+        </label>
         <button type="submit" className="user-setting-save">
-          保存
+          確認
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate("/setting")}
+          className="user-setting-back"
+        >
+          戻る
         </button>
       </form>
     </div>
