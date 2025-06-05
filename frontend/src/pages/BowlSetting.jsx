@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const BowlSetting = () => {
   const [bowlWeight, setBowlWeight] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,7 +16,9 @@ const BowlSetting = () => {
 
   const handleConfirm = (e) => {
     e.preventDefault();
-    navigate("/confirm/bowl", { state: { bowlWeight } });
+    navigate("/confirm/bowl", {
+      state: { bowlWeight: parseFloat(bowlWeight) },
+    });
   };
 
   return (
@@ -42,6 +45,7 @@ const BowlSetting = () => {
           戻る
         </button>
       </form>
+      {message && <p>{message}</p>}
     </div>
   );
 };
