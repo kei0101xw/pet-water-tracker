@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./PetSetting.css";
 
 const PetSetting = () => {
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [pet, setPet] = useState({
@@ -12,6 +13,13 @@ const PetSetting = () => {
     weightKg: "",
     birthdate: "",
   });
+
+  // 戻ってきたときに state を反映させる処理
+  useEffect(() => {
+    if (location.state?.pet) {
+      setPet(location.state.pet);
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,8 +98,15 @@ const PetSetting = () => {
         </label>
 
         <div className="pet-setting-buttons">
-          <button type="submit">確認へ進む</button>
+          <button type="submit">確認</button>
         </div>
+        <button
+          type="button"
+          onClick={() => navigate("/setting")}
+          className="pet-setting-back"
+        >
+          戻る
+        </button>
       </form>
     </div>
   );
