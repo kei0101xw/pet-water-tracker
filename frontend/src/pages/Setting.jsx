@@ -10,25 +10,25 @@ const Setting = () => {
       <h1 className="setting-title">設定メニュー</h1>
       <div className="setting-buttons">
         <button
-          onClick={() => navigate("/settings/user")}
+          onClick={() => navigate("/setting/user")}
           className="setting-button"
         >
           ユーザー設定
         </button>
         <button
-          onClick={() => navigate("/settings/pet")}
+          onClick={() => navigate("/setting/pet")}
           className="setting-button"
         >
           ペット設定
         </button>
         <button
-          onClick={() => navigate("/settings/plate")}
+          onClick={() => navigate("/setting/plate")}
           className="setting-button"
         >
           皿の重量設定
         </button>
         <button
-          onClick={() => navigate("/settings/sensor")}
+          onClick={() => navigate("/setting/sensor")}
           className="setting-button"
         >
           センサ設定
