@@ -7,6 +7,7 @@ import Setting from "./pages/Setting";
 import UserSetting from "./pages/UserSetting";
 import UserConfirm from "./pages/UserConfirm";
 import PetSetting from "./pages/PetSetting";
+import PetConfirm from "./pages/PetConfirm";
 import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import Details from "./pages/Details";
@@ -25,6 +26,7 @@ function App() {
           <Route path="/setting/user" element={<UserSetting />} />
           <Route path="/confirm/user" element={<UserConfirm />} />
           <Route path="/setting/pet" element={<PetSetting />} />
+          <Route path="/confirm/pet" element={<PetConfirm />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/details" element={<Details />} />
           <Route path="/details/:id" element={<PetDetail />} />
