@@ -55,6 +55,13 @@ const loginUser = async (req, res) => {
 
     const token = generateToken(user);
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, //HTTPS限定（開発中はfalseでも可）
+      sameSite: "Strict", //CSRF対策
+      maxAge: 7 * 24 * 60 * 60 * 1000, //1週間
+    });
+
     return res.status(200).json({
       message: "ログイン成功",
       user: {

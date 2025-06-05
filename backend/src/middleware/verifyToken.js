@@ -2,18 +2,18 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const token = req.cookies?.token; // ← クッキーから取得
 
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) return res.status(403).json("無効なトークンです");
-      req.user = user;
-      next();
-    });
-  } else {
+  if (!token) {
     return res.status(401).json("トークンがありません");
   }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json("無効なトークンです");
+
+    req.user = user;
+    next();
+  });
 };
 
 const verifySensorToken = (req, res, next) => {
