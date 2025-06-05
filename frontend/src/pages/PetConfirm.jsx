@@ -23,10 +23,31 @@ const PetConfirm = () => {
     }
   };
 
-  const handleRegister = () => {
-    // 実際の登録処理（API呼び出しなど）をここに実装
-    alert("登録が完了しました！");
-    navigate("/home");
+  //サーバーに送る
+  const handleRegister = async () => {
+    try {
+      const response = await fetch("/api/pets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(pet),
+      });
+
+      if (!response.ok) {
+        throw new Error("登録に失敗しました");
+      }
+
+      alert("登録が完了しました！");
+      navigate("/home");
+    } catch (error) {
+      console.error("登録エラー:", error);
+      alert("登録に失敗しました");
+    }
+  };
+
+  const handleBack = () => {
+    navigate("/setting/pet", { state: { pet } }); // ← 情報を持ったまま戻る
   };
 
   return (
@@ -54,7 +75,7 @@ const PetConfirm = () => {
       </div>
 
       <div className="pet-confirm-buttons">
-        <button onClick={() => navigate(-1)}>戻る</button>
+        <button onClick={handleBack}>戻る</button>
         <button onClick={handleRegister}>登録</button>
       </div>
     </div>
