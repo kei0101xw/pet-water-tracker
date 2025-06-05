@@ -20,7 +20,7 @@ const Home = () => {
           onClick={() => navigate("/details")}
           className="nav-button green"
         >
-          ○○くんの情報
+          ペットの情報
         </button>
         <button
           onClick={() => navigate("/setting")}
