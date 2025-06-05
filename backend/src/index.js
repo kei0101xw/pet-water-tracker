@@ -7,7 +7,9 @@ const waterBowlRoute = require("./routes/waterBowl");
 const waterLogRoute = require("./routes/waterLog");
 const connectDB = require("./config/connect");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
+app.use(cookieParser());
 app.use(express.json());
 
 const PORT = process.env.PORT;
