@@ -1,5 +1,25 @@
 .details-container {
+  padding: 2rem;
+}
+
+.pet-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pet-card {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   padding: 1rem;
+  width: 200px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.pet-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .details-title {
