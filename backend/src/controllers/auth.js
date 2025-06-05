@@ -57,7 +57,7 @@ const loginUser = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, //HTTPS限定（開発中はfalseでも可）
+      secure: true,
       sameSite: "Strict", //CSRF対策
       maxAge: 7 * 24 * 60 * 60 * 1000, //1週間
     });
@@ -74,6 +74,15 @@ const loginUser = async (req, res) => {
     res.status(500).json(err);
     console.log(err);
   }
+};
+
+const logoutUser = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "Strict",
+  });
+  return res.status(200).json({ message: "ログアウトしました" });
 };
 
 //センサ用のトークン発行
@@ -132,5 +141,6 @@ const generateSensorToken = async (req, res) => {
 module.exports = {
   createUser,
   loginUser,
+  logoutUser,
   generateSensorToken,
 };
