@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const petRoute = require("./routes/pets");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/users");
@@ -11,6 +12,13 @@ const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:5050",
+    credentials: true,
+  })
+);
 
 const PORT = process.env.PORT;
 
