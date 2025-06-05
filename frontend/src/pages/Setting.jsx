@@ -22,7 +22,7 @@ const Setting = () => {
           ペット設定
         </button>
         <button
-          onClick={() => navigate("/setting/plate")}
+          onClick={() => navigate("/setting/bowl")}
           className="setting-button"
         >
           皿の重量設定
