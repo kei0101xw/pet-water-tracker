@@ -41,6 +41,9 @@ const UserConfirm = () => {
       <p>
         <strong>メールアドレス:</strong> {user.email}
       </p>
+      <p>
+        <strong>パスワード:</strong> {"*".repeat(user.password.length)}
+      </p>
       <button onClick={() => navigate("/setting/user", { state: { user } })}>
         戻る
       </button>
