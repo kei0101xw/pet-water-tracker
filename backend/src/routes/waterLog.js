@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { createWaterLog } = require("../controllers/waterLog");
-const verifyToken = require("../middleware/verifyToken");
+const { verifySensorToken } = require("../middleware/verifyToken");
 
 // :petId をパスパラメータとして受け取る
-router.post("/:petId", verifyToken, createWaterLog);
+router.post("/:petId", verifySensorToken, createWaterLog);
 
 module.exports = router;
