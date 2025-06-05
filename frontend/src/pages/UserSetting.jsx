@@ -67,6 +67,13 @@ const UserSetting = () => {
         <button type="submit" className="user-setting-save">
           保存
         </button>
+        <button
+          type="button"
+          onClick={() => navigate("/setting")}
+          className="user-setting-back"
+        >
+          戻る
+        </button>
       </form>
     </div>
   );
