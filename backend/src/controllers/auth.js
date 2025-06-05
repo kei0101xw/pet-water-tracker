@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Pet = require("../models/Pet");
+const SensorToken = require("../models/SensorToken");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
@@ -85,7 +87,10 @@ const generateSensorToken = async (req, res) => {
     });
 
     if (existingToken) {
-      return res.status(200).json({ token: existingToken.token });
+      return res.status(200).json({
+        message: "水飲み皿用トークンは1ユーザーにつき1回までです。",
+        token: existingToken.token,
+      });
     }
 
     // 新しいトークンを作成
@@ -107,7 +112,6 @@ const generateSensorToken = async (req, res) => {
       petId: pet._id,
       token,
       issuedAt: now,
-      expiresAt,
       isValid: true,
     });
 
