@@ -29,7 +29,11 @@ const verifySensorToken = (req, res, next) => {
       return res.status(403).json("無効なセンサー認証トークンです");
     }
 
-    req.user = decoded;
+    req.user = {
+      id: decoded.userId,
+      isAdmin: false,
+    };
+
     next();
   } catch (err) {
     console.error("センサートークン認証エラー:", err);
