@@ -30,7 +30,8 @@ const verifySensorToken = (req, res, next) => {
     }
 
     req.user = {
-      id: decoded.userId,
+      userId: decoded.userId,
+      petId: decoded.petId,
       isAdmin: false,
     };
 

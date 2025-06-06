@@ -1,6 +1,6 @@
 const WaterBowl = require("../models/WaterBowl");
 
-//水入れの登録
+// 水入れの登録
 const createWaterBowl = async (req, res) => {
   try {
     const existingBowl = await WaterBowl.findOne({ userId: req.user.id });
@@ -10,92 +10,73 @@ const createWaterBowl = async (req, res) => {
 
     const newWaterBowl = await WaterBowl.create({
       ...req.body,
-      userId: req.user.id, //トークンからのIDを使用
+      userId: req.user.id,
     });
+
     res.status(200).json(newWaterBowl);
   } catch (err) {
-    res.status(500).json(err);
-    console.log(err);
+    console.error(err);
+    res.status(500).json("サーバーエラーが発生しました");
   }
 };
 
-//水入れ情報の取得
+// 水入れ情報の取得
 const getWaterBowl = async (req, res) => {
   try {
-    const bowl = await WaterBowl.findById(req.params.id);
+    const bowl = await WaterBowl.findOne({ userId: req.user.id });
     if (!bowl) return res.status(404).json("水入れが見つかりません");
 
-    //所有者チェック
-    if (bowl.userId.toString() !== req.user.id && !req.user.isAdmin) {
-      return res.status(403).json("あなたはこの操作を許可されていません");
-    }
     res.status(200).json(bowl);
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).json("サーバーエラーが発生しました");
   }
 };
 
-//水入れの更新
+// 水入れの重量の更新
 const updateBowlWeight = async (req, res) => {
   try {
-    const bowl = await WaterBowl.findById(req.params.id);
+    const bowl = await WaterBowl.findOne({ userId: req.user.id });
     if (!bowl) return res.status(404).json("水入れが見つかりません");
 
-    //所有者チェック
-    if (bowl.userId.toString() !== req.user.id && !req.user.isAdmin) {
-      return res.status(403).json("あなたはこの操作を許可されていません");
-    }
-
-    const updatedBowl = await WaterBowl.findByIdAndUpdate(
-      req.params.id,
-      { $set: { bowlWeight: req.body.bowlWeight } },
-      { new: true }
-    );
+    bowl.bowlWeight = req.body.bowlWeight;
+    await bowl.save();
 
     res.status(200).json("水入れの重量が更新されました");
   } catch (err) {
+    console.error(err);
     res.status(500).json("サーバーエラーが発生しました");
   }
 };
 
-//現在の水の量の更新
+// 水量の更新
 const updateWaterLevel = async (req, res) => {
   try {
-    const bowl = await WaterBowl.findById(req.params.id);
+    const bowl = await WaterBowl.findOne({ userId: req.user.id });
     if (!bowl) return res.status(404).json("水入れが見つかりません");
 
-    //所有者チェック
-    if (bowl.userId.toString() !== req.user.id && !req.user.isAdmin) {
-      return res.status(403).json("あなたはこの操作を許可されていません");
-    }
-
-    const updatedBowl = await WaterBowl.findByIdAndUpdate(
-      req.params.id,
-      { $set: { waterLevel: req.body.waterLevel } },
-      { new: true }
-    );
+    bowl.waterLevel = req.body.waterLevel;
+    await bowl.save();
 
     res.status(200).json("水量が更新されました");
   } catch (err) {
+    console.error(err);
     res.status(500).json("サーバーエラーが発生しました");
   }
 };
 
-//水入れの削除
+// 水入れの削除
 const deleteBowl = async (req, res) => {
   try {
-    const bowl = await WaterBowl.findById(req.params.id);
+    const bowl = await WaterBowl.findOne({ userId: req.user.id });
     if (!bowl) return res.status(404).json("水入れが見つかりません");
 
-    //所有者チェック
-    if (bowl.userId.toString() !== req.user.id && !req.user.isAdmin) {
-      return res.status(403).json("あなたはこの操作を許可されていません");
-    }
+    await WaterBowl.deleteOne({ userId: req.user.id });
 
-    const deletedBowl = await WaterBowl.findByIdAndDelete(req.params.id);
     res.status(200).json("水入れが削除されました");
   } catch (err) {
-    return res.status(500).json("サーバーエラーが発生しました");
+    console.error(err);
+    res.status(500).json("サーバーエラーが発生しました");
   }
 };
 

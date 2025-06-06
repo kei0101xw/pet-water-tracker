@@ -55,11 +55,22 @@ const loginUser = async (req, res) => {
 
     const token = generateToken(user);
 
+    // ペットIDを取得してクッキーに保存
+    const pet = await Pet.findOne({ userId: user._id });
+    if (pet) {
+      res.cookie("petId", pet._id.toString(), {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+    }
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "Strict", //CSRF対策
-      maxAge: 7 * 24 * 60 * 60 * 1000, //1週間
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({
@@ -68,7 +79,7 @@ const loginUser = async (req, res) => {
         id: user._id,
         email: user.email,
       },
-      token: token,
+      token,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -82,13 +93,18 @@ const logoutUser = (req, res) => {
     secure: true,
     sameSite: "Strict",
   });
+  res.clearCookie("petId", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "Strict",
+  });
   return res.status(200).json({ message: "ログアウトしました" });
 };
 
 //センサ用のトークン発行
 const generateSensorToken = async (req, res) => {
   try {
-    const { petId } = req.body;
+    const petId = req.cookies.petId;
 
     const pet = await Pet.findById(petId);
     if (!pet || pet.userId.toString() !== req.user.id) {
