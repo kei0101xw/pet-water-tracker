@@ -3,7 +3,7 @@ const router = express.Router();
 const { createWaterLog } = require("../controllers/waterLog");
 const { verifySensorToken } = require("../middleware/verifyToken");
 
-// :petId をパスパラメータとして受け取る
-router.post("/:petId", verifySensorToken, createWaterLog);
+// URLから petId を削除
+router.post("/", verifySensorToken, createWaterLog);
 
 module.exports = router;
