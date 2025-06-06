@@ -7,8 +7,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1 className="home-title">Home 画面</h1>
-
       <div className="button-group">
         <button
           onClick={() => navigate("/analysis/water")}
