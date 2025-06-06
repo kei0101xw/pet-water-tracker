@@ -12,8 +12,8 @@ router.post("/", verifyToken, createPet);
 
 router.get("/mine", verifyToken, getMyPet);
 
-router.put("/:id", verifyToken, updatePet);
+router.put("/mine", verifyToken, updatePet);
 
-router.delete("/:id", verifyToken, deletePet);
+router.delete("/mine", verifyToken, deletePet);
 
 module.exports = router;
