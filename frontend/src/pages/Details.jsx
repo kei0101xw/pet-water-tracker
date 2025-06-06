@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./Details.css";
 
 const Details = () => {
@@ -8,22 +7,30 @@ const Details = () => {
   const [pets, setPets] = useState([]);
 
   useEffect(() => {
-    const fetchPets = async () => {
+    const fetchPet = async () => {
       try {
-        const token = localStorage.getItem("token"); // 認証が必要なら
-        const res = await axios.get("/api/pets", {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:4000/api/v1/pets/mine", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
         });
 
-        setPets(res.data);
+        if (!res.ok) {
+          throw new Error("ペット情報の取得に失敗しました");
+        }
+
+        const data = await res.json();
+
+        setPets([data]); // 単一オブジェクトの場合も配列に
       } catch (err) {
-        console.error("ペット情報の取得に失敗しました:", err.message);
+        console.error(err.message);
+        setPets([]); // エラー時にも空配列をセットしておく
       }
     };
 
-    fetchPets();
+    fetchPet();
   }, []);
 
   const getSpeciesLabel = (species) => {
@@ -35,23 +42,18 @@ const Details = () => {
   return (
     <div className="details-container">
       <h1 className="details-title">ペット一覧</h1>
-
-      {pets.length === 0 ? (
-        <p>ペット情報がありません。</p>
-      ) : (
-        <div className="pet-card-list">
-          {pets.map((pet) => (
-            <div
-              key={pet._id}
-              className="pet-card"
-              onClick={() => navigate(`/details/${pet._id}`)}
-            >
-              <h2>{pet.name}</h2>
-              <p>種類: {getSpeciesLabel(pet.species)}</p>
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="pet-card-list">
+        {pets.map((pet) => (
+          <div
+            key={pet._id}
+            className="pet-card"
+            onClick={() => navigate(`/details/${pet._id}`)}
+          >
+            <h2>{pet.name}</h2>
+            <p>{getSpeciesLabel(pet.species)}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
