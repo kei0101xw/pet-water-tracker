@@ -13,9 +13,11 @@ import PetConfirm from "./pages/PetConfirm";
 import BowlSetting from "./pages/BowlSetting.jsx";
 import BowlConfirm from "./pages/BowlConfirm";
 import NotFound from "./pages/NotFound";
-import Header from "./components/Header";
 import Details from "./pages/Details";
 import PetDetail from "./pages/PetDetail";
+
+import Header from "./components/Header";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -25,19 +27,23 @@ function App() {
         <div>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/analysis" element={<Analysis />} />
-            <Route path="/analysis/water" element={<WaterAnalysis />} />
-            <Route path="/setting" element={<Setting />} />
-            <Route path="/setting/user" element={<UserSetting />} />
-            <Route path="/confirm/user" element={<UserConfirm />} />
-            <Route path="/setting/pet" element={<PetSetting />} />
-            <Route path="/confirm/pet" element={<PetConfirm />} />
-            <Route path="/setting/bowl" element={<BowlSetting />} />
-            <Route path="/confirm/bowl" element={<BowlConfirm />} />
+            <Route element={<ProtectedRoute />}>
+              {/* ログインしていないとアクセスしてはいけないページはこの階層に追加！ */}
+              <Route path="/" element={<Home />} />
+              <Route path="/analysis" element={<Analysis />} />
+              <Route path="/analysis/water" element={<WaterAnalysis />} />
+              <Route path="/setting" element={<Setting />} />
+              <Route path="/setting/user" element={<UserSetting />} />
+              <Route path="/confirm/user" element={<UserConfirm />} />
+              <Route path="/setting/pet" element={<PetSetting />} />
+              <Route path="/confirm/pet" element={<PetConfirm />} />
+              <Route path="/setting/bowl" element={<BowlSetting />} />
+              <Route path="/confirm/bowl" element={<BowlConfirm />} />
+              <Route path="/details" element={<Details />} />
+              <Route path="/details/:id" element={<PetDetail />} />
+              {/* ログインしていないとアクセスしてはいけないページはこの階層に追加！ */}
+            </Route>
             <Route path="*" element={<NotFound />} />
-            <Route path="/details" element={<Details />} />
-            <Route path="/details/:id" element={<PetDetail />} />
           </Routes>
         </div>
       </AuthProvider>
