@@ -18,17 +18,16 @@ const createPet = async (req, res) => {
   }
 };
 
-const getPet = async (req, res) => {
+const getMyPet = async (req, res) => {
   try {
-    const pet = await Pet.findById(req.params.id);
-    if (!pet) return res.status(404).json("登録された情報が見つかりません");
+    console.log("ユーザーID");
+    console.log(req.user.id);
+    const pet = await Pet.findOne({ userId: req.user.id });
+    if (!pet) return res.status(404).json("登録されたペットが見つかりません");
 
-    if (pet.userId.toString() !== req.user.id && !req.user.isAdmin) {
-      return res.status(403).json("あなたはこの操作を許可されていません");
-    }
     res.status(200).json(pet);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json("サーバーエラーが発生しました");
   }
 };
 
@@ -74,7 +73,7 @@ const deletePet = async (req, res) => {
 
 module.exports = {
   createPet,
-  getPet,
+  getMyPet,
   updatePet,
   deletePet,
 };
