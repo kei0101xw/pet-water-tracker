@@ -10,9 +10,9 @@ const {
 } = require("../controllers/waterBowl");
 
 router.post("/", verifyToken, createWaterBowl);
-router.get("/:id", verifyToken, getWaterBowl);
-router.put("/:id/bowl-weight", verifyToken, updateBowlWeight);
-router.put("/:id/water-level", verifyToken, updateWaterLevel);
-router.delete("/:id", verifyToken, deleteBowl);
+router.get("/", verifyToken, getWaterBowl);
+router.put("/bowl-weight", verifyToken, updateBowlWeight);
+router.put("/water-level", verifyToken, updateWaterLevel);
+router.delete("/", verifyToken, deleteBowl);
 
 module.exports = router;
