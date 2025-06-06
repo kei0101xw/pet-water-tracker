@@ -3,6 +3,7 @@ import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
+import WaterAnalysis from "./pages/WaterAnalysis";
 import Setting from "./pages/Setting";
 import UserSetting from "./pages/UserSetting";
 import UserConfirm from "./pages/UserConfirm";
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/analysis" element={<Analysis />} />
+          <Route path="/analysis/water" element={<WaterAnalysis />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/setting/user" element={<UserSetting />} />
           <Route path="/confirm/user" element={<UserConfirm />} />

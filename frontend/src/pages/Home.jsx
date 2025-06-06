@@ -11,7 +11,7 @@ const Home = () => {
 
       <div className="button-group">
         <button
-          onClick={() => navigate("/analysis")}
+          onClick={() => navigate("/analysis/water")}
           className="nav-button blue"
         >
           分析
