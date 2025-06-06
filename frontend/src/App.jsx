@@ -1,4 +1,5 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -19,25 +20,27 @@ import PetDetail from "./pages/PetDetail";
 function App() {
   return (
     <>
-      <Header />
-      <div>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/analysis" element={<Analysis />} />
-          <Route path="/analysis/water" element={<WaterAnalysis />} />
-          <Route path="/setting" element={<Setting />} />
-          <Route path="/setting/user" element={<UserSetting />} />
-          <Route path="/confirm/user" element={<UserConfirm />} />
-          <Route path="/setting/pet" element={<PetSetting />} />
-          <Route path="/confirm/pet" element={<PetConfirm />} />
-          <Route path="/setting/bowl" element={<BowlSetting />} />
-          <Route path="/confirm/bowl" element={<BowlConfirm />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/details" element={<Details />} />
-          <Route path="/details/:id" element={<PetDetail />} />
-        </Routes>
-      </div>
+      <AuthProvider>
+        <Header />
+        <div>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/analysis" element={<Analysis />} />
+            <Route path="/analysis/water" element={<WaterAnalysis />} />
+            <Route path="/setting" element={<Setting />} />
+            <Route path="/setting/user" element={<UserSetting />} />
+            <Route path="/confirm/user" element={<UserConfirm />} />
+            <Route path="/setting/pet" element={<PetSetting />} />
+            <Route path="/confirm/pet" element={<PetConfirm />} />
+            <Route path="/setting/bowl" element={<BowlSetting />} />
+            <Route path="/confirm/bowl" element={<BowlConfirm />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/details" element={<Details />} />
+            <Route path="/details/:id" element={<PetDetail />} />
+          </Routes>
+        </div>
+      </AuthProvider>
     </>
   );
 }
