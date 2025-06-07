@@ -155,7 +155,15 @@ const generateSensorToken = async (req, res) => {
 };
 
 const getMyInfo = async (req, res) => {
-  res.status(200).json({ user: req.user });
+  try {
+    const user = await User.findById(req.user.id).select("-password -isAdmin");
+    if (!user) {
+      return res.status(404).json({ message: "ユーザーが見つかりません" });
+    }
+    res.status(200).json({ user });
+  } catch (err) {
+    res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
+  }
 };
 
 module.exports = {
