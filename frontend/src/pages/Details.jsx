@@ -14,7 +14,7 @@ const Details = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          credentials: "include",
+          withCredentials: true,
         });
 
         if (!res.ok) {
