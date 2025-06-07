@@ -6,7 +6,7 @@ import "../pages/Home.css";
 const Home = () => {
   const navigate = useNavigate();
 
-  const [lastWeight, setLastWeight] = useState(null);
+  const [waterLevel, setWaterLevel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,7 +20,7 @@ const Home = () => {
           },
           withCredentials: true,
         });
-        setLastWeight(res.data.lastWeight);
+        setWaterLevel(res.data.waterLevel);
       } catch (err) {
         setError(err.response?.data || "データの取得に失敗しました");
       } finally {
@@ -34,14 +34,13 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="button-group">
-        {/* 最後の重さだけ表示 */}
         <div className="status-box">
           {loading && <p className="loading">読み込み中...</p>}
           {error && <p className="error">{error}</p>}
           {!loading && !error && (
             <p className="last-weight">
-              <strong>最後の水の重さ：</strong>
-              {lastWeight ?? "不明"} g
+              <strong>現在の水の量：</strong>
+              {waterLevel ?? "不明"} g
             </p>
           )}
         </div>
