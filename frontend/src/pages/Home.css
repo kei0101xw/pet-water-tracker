@@ -43,3 +43,19 @@
   background-color: #2563eb;
   transform: scale(1.03);
 }
+
+.status-box {
+  font-size: 18px;
+}
+
+.loading {
+  color: gray;
+}
+
+.error {
+  color: red;
+}
+
+.last-weight {
+  color: #333;
+}
