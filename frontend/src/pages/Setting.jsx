@@ -9,10 +9,7 @@ const Setting = () => {
     <div className="setting-container">
       <h1 className="setting-title">設定メニュー</h1>
       <div className="setting-buttons">
-        <button
-          onClick={() => navigate("/setting/user")}
-          className="setting-button"
-        >
+        <button onClick={() => navigate("/user")} className="setting-button">
           ユーザー情報
         </button>
         <button
