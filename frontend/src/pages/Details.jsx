@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Details.css";
 
 const Details = () => {
-  const navigate = useNavigate();
-  const [pets, setPets] = useState([]);
+  const [pet, setPet] = useState(null);
 
   useEffect(() => {
     const fetchPet = async () => {
@@ -14,7 +12,7 @@ const Details = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          withCredentials: true,
+          credentials: "include",
         });
 
         if (!res.ok) {
@@ -22,11 +20,10 @@ const Details = () => {
         }
 
         const data = await res.json();
-
-        setPets([data]); // 単一オブジェクトの場合も配列に
+        setPet(data); // 単一オブジェクトの場合も配列に
       } catch (err) {
         console.error(err.message);
-        setPets([]); // エラー時にも空配列をセットしておく
+        setPet(null); // エラー時にも空配列をセットしておく
       }
     };
 
@@ -39,21 +36,26 @@ const Details = () => {
     return species || "不明";
   };
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "不明";
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("ja-JP");
+  };
+
   return (
     <div className="details-container">
-      <h1 className="details-title">ペット一覧</h1>
-      <div className="pet-card-list">
-        {pets.map((pet) => (
-          <div
-            key={pet._id}
-            className="pet-card"
-            onClick={() => navigate(`/details/${pet._id}`)}
-          >
-            <h2>{pet.name}</h2>
-            <p>{getSpeciesLabel(pet.species)}</p>
-          </div>
-        ))}
-      </div>
+      <h1 className="details-title">ペット情報</h1>
+      {pet ? (
+        <div>
+          <h2>名前: {pet.name}</h2>
+          <p>種類: {getSpeciesLabel(pet.species)}</p>
+          <p>品種: {pet.breed || "不明"}</p>
+          <p>体重: {pet.weightKg} kg</p>
+          <p>誕生日: {formatDate(pet.birthdate)}</p>
+        </div>
+      ) : (
+        <p>ペット情報が見つかりません。</p>
+      )}
     </div>
   );
 };
