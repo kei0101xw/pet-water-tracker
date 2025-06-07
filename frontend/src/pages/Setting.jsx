@@ -13,7 +13,7 @@ const Setting = () => {
           onClick={() => navigate("/setting/user")}
           className="setting-button"
         >
-          ユーザー設定
+          ユーザー情報
         </button>
         <button
           onClick={() => navigate("/setting/pet")}
