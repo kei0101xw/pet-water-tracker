@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./PetSetting.css";
+import "./PetRegister.css";
 
-const PetSetting = () => {
+const PetRegister = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const PetSetting = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // 本来は userId を含めてバックエンドへ送信する想定
-    navigate("/confirm/pet", { state: { pet } });
+    navigate("/pet/confirm", { state: { pet } });
   };
 
   return (
@@ -98,11 +98,11 @@ const PetSetting = () => {
         </label>
 
         <div className="pet-setting-buttons">
-          <button type="submit">確認</button>
+          <button type="submit">次へ</button>
         </div>
         <button
           type="button"
-          onClick={() => navigate("/setting")}
+          onClick={() => navigate("/pet")}
           className="pet-setting-back"
         >
           戻る
@@ -112,4 +112,4 @@ const PetSetting = () => {
   );
 };
 
-export default PetSetting;
+export default PetRegister;

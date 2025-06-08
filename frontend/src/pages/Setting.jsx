@@ -12,11 +12,8 @@ const Setting = () => {
         <button onClick={() => navigate("/user")} className="setting-button">
           ユーザー情報
         </button>
-        <button
-          onClick={() => navigate("/setting/pet")}
-          className="setting-button"
-        >
-          ペット設定
+        <button onClick={() => navigate("/pet")} className="setting-button">
+          ペット管理
         </button>
         <button
           onClick={() => navigate("/setting/bowl")}

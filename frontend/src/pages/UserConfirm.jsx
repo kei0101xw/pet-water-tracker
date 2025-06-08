@@ -34,20 +34,27 @@ const UserConfirm = () => {
 
   return (
     <div className="confirm-page">
-      <h1>ユーザー情報確認</h1>
-      <p>
+      <h1 className="confirm-title">ユーザー情報確認</h1>
+      <p className="confirm-item">
         <strong>ユーザー名:</strong> {user.username}
       </p>
-      <p>
+      <p className="confirm-item">
         <strong>メールアドレス:</strong> {user.email}
       </p>
-      <p>
+      <p className="confirm-item">
         <strong>パスワード:</strong> {"*".repeat(user.password.length)}
       </p>
-      <button onClick={() => navigate("/setting/user", { state: { user } })}>
-        戻る
-      </button>
-      <button onClick={handleRegister}>登録</button>
+      <div className="confirm-buttons">
+        <button
+          className="confirm-button back"
+          onClick={() => navigate("/setting/user", { state: { user } })}
+        >
+          戻る
+        </button>
+        <button className="confirm-button submit" onClick={handleRegister}>
+          登録
+        </button>
+      </div>
     </div>
   );
 };

@@ -47,7 +47,7 @@ const PetConfirm = () => {
   };
 
   const handleBack = () => {
-    navigate("/setting/pet", { state: { pet } }); // ← 情報を持ったまま戻る
+    navigate("/pet/register", { state: { pet } }); // ← 情報を持ったまま戻る
   };
 
   return (
