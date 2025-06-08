@@ -9,7 +9,8 @@ import UserSetting from "./pages/UserSetting";
 import UserConfirm from "./pages/UserConfirm";
 import UserPage from "./pages/UserPage";
 import EditUserPage from "./pages/EditUserPage";
-import PetSetting from "./pages/PetSetting";
+import PetPage from "./pages/PetPage";
+import PetRegister from "./pages/PetRegister";
 import PetConfirm from "./pages/PetConfirm";
 import BowlSetting from "./pages/BowlSetting.jsx";
 import BowlConfirm from "./pages/BowlConfirm";
@@ -37,8 +38,9 @@ function App() {
               <Route path="/user/edit" element={<EditUserPage />} />
               <Route path="/setting/user" element={<UserSetting />} />
               <Route path="/confirm/user" element={<UserConfirm />} />
-              <Route path="/setting/pet" element={<PetSetting />} />
-              <Route path="/confirm/pet" element={<PetConfirm />} />
+              <Route path="/pet" element={<PetPage />} />
+              <Route path="/pet/register" element={<PetRegister />} />
+              <Route path="/pet/confirm" element={<PetConfirm />} />
               <Route path="/setting/bowl" element={<BowlSetting />} />
               <Route path="/confirm/bowl" element={<BowlConfirm />} />
               <Route path="/details" element={<Details />} />
