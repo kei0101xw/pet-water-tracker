@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -91,7 +91,7 @@ const WaterLogChart = () => {
         <div className="water-analysis-title">一日の飲水量の推移</div>
         <div className="water-analysis-date">{todayStr}</div>
         <ResponsiveContainer>
-          <LineChart
+          <BarChart
             data={data}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
           >
@@ -105,13 +105,8 @@ const WaterLogChart = () => {
               }}
             />
             <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="amount"
-              stroke="#0077cc"
-              name="飲水量"
-            />
-          </LineChart>
+            <Bar dataKey="amount" fill="#0077cc" name="飲水量" />
+          </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
