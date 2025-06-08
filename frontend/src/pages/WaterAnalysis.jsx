@@ -60,8 +60,6 @@ const WaterLogChart = () => {
       .map((log) => ({
         ...log,
         time: new Date(log.timestamp).toLocaleString("ja-JP", {
-          month: "2-digit",
-          day: "2-digit",
           hour: "2-digit",
           minute: "2-digit",
         }),
@@ -78,9 +76,17 @@ const WaterLogChart = () => {
     // fetchLogs();
   }, []);
 
+  const today = new Date();
+  const todayStr = today.toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "short",
+  });
+
   return (
     <div style={{ width: "100%", height: 400 }}>
-      <h2>一日の飲水量の推移</h2>
+      <h1>一日の飲水量の推移 （{todayStr}）</h1>
       <ResponsiveContainer>
         <LineChart
           data={data}
