@@ -40,8 +40,8 @@ function App() {
               <Route path="/setting" element={<Setting />} />
               <Route path="/user" element={<UserPage />} />
               <Route path="/user/edit" element={<UserEditPage />} />
-              <Route path="/setting/user" element={<UserSetting />} />
-              <Route path="/confirm/user" element={<UserConfirm />} />
+              <Route path="/user/setting" element={<UserSetting />} />
+              <Route path="/user/confirm" element={<UserConfirm />} />
               <Route path="/pet" element={<PetPage />} />
               <Route path="/pet/register" element={<PetRegister />} />
               <Route path="/pet/confirm" element={<PetConfirm />} />
