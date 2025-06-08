@@ -12,21 +12,21 @@ const UserConfirm = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch("/api/register", {
+      const res = await fetch("http://localhost:4000/api/v1/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(user),
       });
 
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error("登録に失敗しました");
       }
 
-      // 成功時の処理
       alert("登録が完了しました！");
-      navigate("/home"); // ホーム画面などにリダイレクト
+      navigate("/");
     } catch (error) {
       alert(error.message);
     }
@@ -47,7 +47,7 @@ const UserConfirm = () => {
       <div className="confirm-buttons">
         <button
           className="confirm-button back"
-          onClick={() => navigate("/setting/user", { state: { user } })}
+          onClick={() => navigate("/user/register", { state: { user } })}
         >
           戻る
         </button>

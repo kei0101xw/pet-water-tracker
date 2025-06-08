@@ -52,7 +52,11 @@ const Login = () => {
           <button type="submit" className="login-button submit">
             ログイン
           </button>
-          <button className="login-button register">
+          <button
+            type="button"
+            className="login-button register"
+            onClick={() => navigate("/user/register")}
+          >
             新規登録の方はこちら
           </button>
 
