@@ -3,7 +3,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -13,27 +13,18 @@
 }
 
 .nav-button {
-  font-size: 16px;
-  padding: 10px 20px;
+  font-size: 15px;
+  padding: 5px 20px;
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: rgb(54 145 220);
   cursor: pointer;
   transition: background-color 0.3s ease;
+  background-color: #ffffff;
 }
 
 .nav-button:hover {
   opacity: 0.9;
-}
-
-.nav-button.blue {
-  background-color: #007bff;
-}
-
-.nav-button.green {
-  background-color: #28a745;
-}
-
-.nav-button.purple {
-  background-color: #6f42c1;
+  color: #ffffff;
+  background-color: rgb(21, 108, 179);
 }
