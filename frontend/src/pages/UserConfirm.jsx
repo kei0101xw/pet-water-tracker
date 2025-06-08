@@ -47,7 +47,7 @@ const UserConfirm = () => {
       <div className="confirm-buttons">
         <button
           className="confirm-button back"
-          onClick={() => navigate("/setting/user", { state: { user } })}
+          onClick={() => navigate("/user/register", { state: { user } })}
         >
           戻る
         </button>
