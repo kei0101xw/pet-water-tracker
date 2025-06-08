@@ -8,7 +8,7 @@ import Setting from "./pages/Setting";
 import UserSetting from "./pages/UserSetting";
 import UserConfirm from "./pages/UserConfirm";
 import UserPage from "./pages/UserPage";
-import EditUserPage from "./pages/EditUserPage";
+import UserEditPage from "./pages/UserEditPage";
 import PetPage from "./pages/PetPage";
 import PetRegister from "./pages/PetRegister";
 import PetConfirm from "./pages/PetConfirm";
@@ -35,7 +35,7 @@ function App() {
               <Route path="/analysis/water" element={<WaterAnalysis />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/user" element={<UserPage />} />
-              <Route path="/user/edit" element={<EditUserPage />} />
+              <Route path="/user/edit" element={<UserEditPage />} />
               <Route path="/setting/user" element={<UserSetting />} />
               <Route path="/confirm/user" element={<UserConfirm />} />
               <Route path="/pet" element={<PetPage />} />
