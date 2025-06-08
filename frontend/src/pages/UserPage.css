@@ -1,0 +1,62 @@
+.user-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+}
+
+.user-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+.user-info {
+  font-size: 16px;
+  margin: 12px 0;
+  color: #555;
+}
+
+.user-info strong {
+  color: #000;
+}
+
+.user-error {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.user-loading {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+}
+
+.user-buttons {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.user-button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.user-button:hover {
+  background-color: #0056b3;
+}
+
+.user-button:active {
+  background-color: #003f7f;
+}
