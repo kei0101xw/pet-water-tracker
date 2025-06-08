@@ -10,11 +10,11 @@ const PetPage = () => {
   };
 
   const handlePetSettings = () => {
-    navigate("/pet/settings");
+    navigate("/pet/info");
   };
 
   const handleGoBack = () => {
-    navigate(-1);
+    navigate("/setting");
   };
 
   return (
