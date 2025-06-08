@@ -6,16 +6,16 @@
   align-items: center;
   padding: 2rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9fafb;
+  background-color: #ffffff;
   padding-top: 110px;
 }
 
 .home-title {
   display: flex;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 600;
   margin-bottom: 2rem;
-  color: #111827;
+  color: #5d5d5d;
   justify-content: center;
 }
 
