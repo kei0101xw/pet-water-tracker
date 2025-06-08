@@ -1,0 +1,83 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Arial", sans-serif;
+  background-color: #ffffff;
+  margin-top: 150px;
+}
+
+.app-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.login-box {
+  background-color: #96b8da;
+  padding: 15px 0;
+  border-radius: 12px;
+  width: 280px;
+  height: 300px;
+  margin: 30px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-title {
+  font-size: 20px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.login-button {
+  display: block;
+  width: 60%;
+  margin: 6px 0;
+  padding: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  color: black;
+  transition: background-color 0.3s;
+}
+
+.login-button.submit {
+  background-color: #599c8f;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+.login-button.submit:hover {
+  background-color: #2563eb;
+}
+
+.login-button.register {
+  background-color: #76f79a;
+}
+
+.login-button.register:hover {
+  background-color: #d1d5db;
+}
+
+.login-message {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #4b5563;
+  text-align: center;
+}
