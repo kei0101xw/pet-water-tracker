@@ -33,22 +33,30 @@ const UserPage = () => {
   if (!user) return <p>読み込み中...</p>;
 
   return (
-    <div>
-      <h1>ユーザーページ</h1>
-      <p>
+    <div className="user-container">
+      <h1 className="user-title">ユーザーページ</h1>
+      <p className="user-info">
         <strong>ユーザー名:</strong> {user.username ?? "(未設定)"}
       </p>
-      <p>
+      <p className="user-info">
         <strong>メールアドレス:</strong> {user.email}
       </p>
 
-      <p>
+      <p className="user-info">
         <strong>作成日:</strong> {new Date(user.createdAt).toLocaleString()}
       </p>
-      <button onClick={() => navigate(-1)}>戻る</button>
-      <button onClick={() => navigate("/user/edit", { state: user })}>
-        修正
-      </button>
+
+      <div className="user-buttons">
+        <button className="user-button" onClick={() => navigate(-1)}>
+          戻る
+        </button>
+        <button
+          className="user-button"
+          onClick={() => navigate("/user/edit", { state: user })}
+        >
+          修正
+        </button>
+      </div>
     </div>
   );
 };
