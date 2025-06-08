@@ -8,6 +8,7 @@ import Setting from "./pages/Setting";
 import UserSetting from "./pages/UserSetting";
 import UserConfirm from "./pages/UserConfirm";
 import UserPage from "./pages/UserPage";
+import EditUserPage from "./pages/EditUserPage";
 import PetSetting from "./pages/PetSetting";
 import PetConfirm from "./pages/PetConfirm";
 import BowlSetting from "./pages/BowlSetting.jsx";
@@ -33,6 +34,7 @@ function App() {
               <Route path="/analysis/water" element={<WaterAnalysis />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/user" element={<UserPage />} />
+              <Route path="/user/edit" element={<EditUserPage />} />
               <Route path="/setting/user" element={<UserSetting />} />
               <Route path="/confirm/user" element={<UserConfirm />} />
               <Route path="/setting/pet" element={<PetSetting />} />
