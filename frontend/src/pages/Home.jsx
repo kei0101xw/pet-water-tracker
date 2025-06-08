@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../pages/Home.css";
-import Footer from "../components/Footer";
+import Circle from "../components/Circle";
 
 const Home = () => {
   const [waterLevel, setWaterLevel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const waterPercentage = 70;
 
   useEffect(() => {
     const fetchWaterBowl = async () => {
@@ -41,6 +42,9 @@ const Home = () => {
             {waterLevel ?? "不明"} g
           </p>
         )}
+        <div className="circle-wrapper">
+          <Circle score={waterPercentage} />
+        </div>
       </div>
     </div>
   );
