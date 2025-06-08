@@ -33,18 +33,18 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <div className="button-group">
-        <div className="status-box">
-          {loading && <p className="loading">読み込み中...</p>}
-          {error && <p className="error">{error}</p>}
-          {!loading && !error && (
-            <p className="last-weight">
-              <strong>現在の水の量：</strong>
-              {waterLevel ?? "不明"} g
-            </p>
-          )}
-        </div>
+      <div className="status-box">
+        {loading && <p className="loading">読み込み中...</p>}
+        {error && <p className="error">{error}</p>}
+        {!loading && !error && (
+          <p className="last-weight">
+            <strong>現在の水の量：</strong>
+            {waterLevel ?? "不明"} g
+          </p>
+        )}
+      </div>
 
+      <footer className="footer">
         <button
           onClick={() => navigate("/analysis/water")}
           className="nav-button blue"
@@ -63,7 +63,7 @@ const Home = () => {
         >
           設定
         </button>
-      </div>
+      </footer>
     </div>
   );
 };
