@@ -4,80 +4,74 @@ import {
   Line,
   XAxis,
   YAxis,
-  Tooltip,
   CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import "./WaterAnalysis.css";
+import axios from "axios";
 
-const WaterAnalysis = () => {
+const WaterLogChart = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchWaterData = async () => {
+    const fetchLogs = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("/api/waterbowls/history", {
+        const res = await axios.get("http://localhost:4000/api/v1/water-log", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          withCredentials: true, // 認証用cookieを送信
         });
+        // timestampを整形
+        const formatted = res.data
+          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // 昇順ソート
+          .map((log) => ({
+            ...log,
+            time: new Date(log.timestamp).toLocaleString("ja-JP", {
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          }));
 
-        if (!res.ok) {
-          throw new Error("水位データの取得に失敗しました");
-        }
-
-        const json = await res.json();
-
-        // 日付と水位を整形
-        const formattedData = json.map((item) => ({
-          time: new Date(item.timestamp).toLocaleString("ja-JP", {
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          waterLevel: item.waterLevel ?? 0,
-        }));
-
-        setData(formattedData);
+        setData(formatted);
+        setError(""); // エラーがあれば消す
       } catch (err) {
-        setError(err.message);
+        console.error("ログ取得失敗:", err);
+        setError("ログの取得に失敗しました");
       }
     };
 
-    fetchWaterData();
+    fetchLogs();
   }, []);
 
   return (
-    <div className="water-analysis-container">
-      <h1>水位の推移</h1>
-      {error && <p>{error}</p>}
-      {!error && data.length > 0 ? (
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart
-            data={data}
-            margin={{ top: 20, right: 30, bottom: 20, left: 0 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time" />
-            <YAxis unit=" ml" />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="waterLevel"
-              stroke="#8884d8"
-              strokeWidth={2}
-              dot={{ r: 3 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      ) : (
-        !error && <p>水位データが存在しません。</p>
-      )}
+    <div style={{ width: "100%", height: 400 }}>
+      <h2>飲水量の推移</h2>
+      <ResponsiveContainer>
+        <LineChart
+          data={data}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="time" />
+          <YAxis
+            label={{ value: "飲水量 (g)", angle: -90, position: "insideLeft" }}
+          />
+          <Tooltip />
+          <Line
+            type="monotone"
+            dataKey="amount"
+            stroke="#0077cc"
+            name="飲水量"
+          />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 };
 
-export default WaterAnalysis;
+export default WaterLogChart;
