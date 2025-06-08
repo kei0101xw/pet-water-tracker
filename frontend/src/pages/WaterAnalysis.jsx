@@ -86,27 +86,29 @@ const WaterLogChart = () => {
   });
 
   return (
-    <div style={{ width: "100%", height: 400 }}>
-      <div className="water-analysis-title">一日の飲水量の推移</div>
-      <div className="water-analysis-date">{todayStr}</div>
-      <ResponsiveContainer>
-        <BarChart
-          data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="time" />
-          <YAxis
-            label={{
-              value: "飲水量 (g)",
-              angle: -90,
-              position: "insideLeft",
-            }}
-          />
-          <Tooltip />
-          <Bar dataKey="amount" fill="#0077cc" name="飲水量" />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="water-analysis-container">
+      <div style={{ width: "100%", height: 400 }}>
+        <div className="water-analysis-title">一日の飲水量の推移</div>
+        <div className="water-analysis-date">{todayStr}</div>
+        <ResponsiveContainer>
+          <BarChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="time" />
+            <YAxis
+              label={{
+                value: "飲水量 (g)",
+                angle: -90,
+                position: "insideLeft",
+              }}
+            />
+            <Tooltip />
+            <Bar dataKey="amount" fill="#0077cc" name="飲水量" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
