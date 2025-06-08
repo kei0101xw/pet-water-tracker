@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import WaterAnalysis from "./pages/WaterAnalysis";
 import Setting from "./pages/Setting";
+import UserRegister from "./pages/UserRegister";
 import UserSetting from "./pages/UserSetting";
 import UserConfirm from "./pages/UserConfirm";
 import UserPage from "./pages/UserPage";
@@ -31,6 +32,7 @@ function App() {
         <div>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/user/register" element={<UserRegister />} />
             <Route element={<ProtectedRoute />}>
               {/* ログインしていないとアクセスしてはいけないページはこの階層に追加！ */}
               <Route path="/" element={<Home />} />
