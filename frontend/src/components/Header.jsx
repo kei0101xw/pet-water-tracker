@@ -3,6 +3,7 @@ import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
+import logo from "../assets/logo.png";
 
 const Header = () => {
   const { user, setUser } = useAuth();
@@ -36,9 +37,12 @@ const Header = () => {
 
   return (
     <header className="header">
-      <p onClick={goToHome} className="logo">
-        ロゴ
-      </p>
+      <img
+        src={logo}
+        alt="MizuCare Logo"
+        onClick={goToHome}
+        className="logo-image"
+      />
       <button className="hamburger" onClick={toggleMenu}>
         <span className="bar"></span>
         <span className="bar"></span>
