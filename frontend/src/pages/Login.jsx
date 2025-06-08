@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../pages/Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -27,30 +28,37 @@ const Login = () => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h2 className="text-xl mb-4">ログイン</h2>
-      <form onSubmit={handleLogin} className="flex flex-col gap-2">
-        <input
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="border p-2"
-        />
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="border p-2"
-        />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          ログイン
-        </button>
-      </form>
-      {message && <p className="mt-4 text-sm text-gray-700">{message}</p>}
+    <div className="login-container">
+      <h1 className="app-title">ペット水量計測アプリ</h1>
+      <div className="login-box">
+        {/* <h2 className="login-title">ログイン</h2> */}
+        <form onSubmit={handleLogin} className="login-form">
+          <input
+            type="email"
+            placeholder="メールアドレス"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="login-input"
+          />
+          <input
+            type="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="login-input"
+          />
+          <button type="submit" className="login-button submit">
+            ログイン
+          </button>
+          <button className="login-button register">
+            新規登録の方はこちら
+          </button>
+
+          {message && <p className="login-message">{message}</p>}
+        </form>
+      </div>
     </div>
   );
 };
