@@ -26,20 +26,25 @@ const PetConfirm = () => {
   //サーバーに送る
   const handleRegister = async () => {
     try {
-      const response = await fetch("/api/pets", {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:4000/api/v1/pets", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify(pet),
       });
 
-      if (!response.ok) {
-        throw new Error("登録に失敗しました");
+      if (!res.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(
+          `登録に失敗しました: ${error.message || response.status}`
+        );
       }
-
       alert("登録が完了しました！");
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       console.error("登録エラー:", error);
       alert("登録に失敗しました");
@@ -47,7 +52,7 @@ const PetConfirm = () => {
   };
 
   const handleBack = () => {
-    navigate("/pet/register", { state: { pet } }); // ← 情報を持ったまま戻る
+    navigate("/pet/register", { state: { pet } });
   };
 
   return (
