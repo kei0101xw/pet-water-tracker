@@ -22,6 +22,7 @@ import Details from "./pages/Details";
 import PetDetail from "./pages/PetDetail";
 
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
+        <Footer />
       </AuthProvider>
     </>
   );
