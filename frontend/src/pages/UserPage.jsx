@@ -46,6 +46,9 @@ const UserPage = () => {
         <strong>作成日:</strong> {new Date(user.createdAt).toLocaleString()}
       </p>
       <button onClick={() => navigate(-1)}>戻る</button>
+      <button onClick={() => navigate("/user/edit", { state: user })}>
+        修正
+      </button>
     </div>
   );
 };
