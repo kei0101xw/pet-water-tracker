@@ -10,6 +10,8 @@ import UserConfirm from "./pages/UserConfirm";
 import UserPage from "./pages/UserPage";
 import UserEditPage from "./pages/UserEditPage";
 import PetPage from "./pages/PetPage";
+import PetInfo from "./pages/PetInfo";
+import PetEditPage from "./pages/PetEditPage";
 import PetRegister from "./pages/PetRegister";
 import PetConfirm from "./pages/PetConfirm";
 import BowlSetting from "./pages/BowlSetting.jsx";
@@ -41,6 +43,8 @@ function App() {
               <Route path="/pet" element={<PetPage />} />
               <Route path="/pet/register" element={<PetRegister />} />
               <Route path="/pet/confirm" element={<PetConfirm />} />
+              <Route path="/pet/info" element={<PetInfo />} />
+              <Route path="/pet/edit" element={<PetEditPage />} />
               <Route path="/setting/bowl" element={<BowlSetting />} />
               <Route path="/confirm/bowl" element={<BowlConfirm />} />
               <Route path="/details" element={<Details />} />
