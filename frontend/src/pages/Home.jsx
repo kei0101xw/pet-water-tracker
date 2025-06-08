@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../pages/Home.css";
+import Footer from "../components/Footer";
 
 const Home = () => {
-  const navigate = useNavigate();
-
   const [waterLevel, setWaterLevel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,26 +43,7 @@ const Home = () => {
         )}
       </div>
 
-      <footer className="footer">
-        <button
-          onClick={() => navigate("/analysis/water")}
-          className="nav-button blue"
-        >
-          分析
-        </button>
-        <button
-          onClick={() => navigate("/details")}
-          className="nav-button green"
-        >
-          ペットの情報
-        </button>
-        <button
-          onClick={() => navigate("/setting")}
-          className="nav-button purple"
-        >
-          設定
-        </button>
-      </footer>
+      <Footer />
     </div>
   );
 };
