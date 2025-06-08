@@ -1,9 +1,28 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Setting.css";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 const Setting = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useAuth();
+
+  const logout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:4000/api/v1/auth/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      setUser(null);
+      navigate("/login");
+    } catch (err) {
+      console.error("ログアウト失敗:", err);
+    }
+  };
 
   return (
     <div className="setting-container">
@@ -26,6 +45,15 @@ const Setting = () => {
           className="setting-button"
         >
           センサ設定
+        </button>
+        <button
+          onClick={() => {
+            logout();
+            navigate("/");
+          }}
+          className="setting-button"
+        >
+          ログアウト
         </button>
       </div>
     </div>

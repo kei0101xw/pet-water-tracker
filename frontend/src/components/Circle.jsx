@@ -36,11 +36,18 @@ const Circle = ({ score }) => {
       <text
         x="50%"
         y="50%"
-        fontSize="0.5em"
+        fontSize="0.4em"
         textAnchor="middle"
         dominantBaseline="middle"
+        fontFamily="Meiryo"
+        fill="#333"
       >
-        {score}%
+        <tspan fontWeight={600} fill="rgb(54, 145, 220)">
+          {score}
+        </tspan>
+        <tspan dx="1" fontSize="0.5em" dy="0.1em">
+          %
+        </tspan>
       </text>
     </svg>
   );

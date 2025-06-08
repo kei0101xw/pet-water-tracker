@@ -4,16 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import logo from "../assets/logo.png";
+import LoginIcon from "@mui/icons-material/Login";
 
 const Header = () => {
   const { user, setUser } = useAuth();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
 
   const goToHome = () => {
     navigate("/");
@@ -43,41 +40,6 @@ const Header = () => {
         onClick={goToHome}
         className="logo-image"
       />
-      <button className="hamburger" onClick={toggleMenu}>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-      </button>
-      <nav className={`nav ${menuOpen ? "open" : ""}`}>
-        <ul className="nav-list">
-          {user ? (
-            <>
-              <li>
-                <Link to="/about" className="nav-item" onClick={toggleMenu}>
-                  設定
-                </Link>
-              </li>
-              <li>
-                <button
-                  className="nav-item"
-                  onClick={() => {
-                    logout();
-                    toggleMenu();
-                  }}
-                >
-                  ログアウト
-                </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link to="/login" className="nav-item" onClick={toggleMenu}>
-                ログイン
-              </Link>
-            </li>
-          )}
-        </ul>
-      </nav>
     </header>
   );
 };
