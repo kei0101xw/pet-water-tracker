@@ -14,6 +14,31 @@ const PetRegister = () => {
     birthdate: "",
   });
 
+  useEffect(() => {
+    const fetchPet = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:4000/api/v1/pets/mine", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data) {
+            navigate("/pet/info");
+          }
+        }
+      } catch (error) {
+        console.error("ペット情報の取得に失敗:", error);
+      }
+    };
+
+    fetchPet();
+  }, []);
+
   // 戻ってきたときに state を反映させる処理
   useEffect(() => {
     if (location.state?.pet) {
@@ -31,7 +56,6 @@ const PetRegister = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 本来は userId を含めてバックエンドへ送信する想定
     navigate("/pet/confirm", { state: { pet } });
   };
 
