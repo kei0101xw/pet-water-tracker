@@ -8,49 +8,79 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import axios from "axios";
+//import axios from "axios";
 
 const WaterLogChart = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchLogs = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:4000/api/v1/water-log", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true, // 認証用cookieを送信
-        });
-        // timestampを整形
-        const formatted = res.data
-          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // 昇順ソート
-          .map((log) => ({
-            ...log,
-            time: new Date(log.timestamp).toLocaleString("ja-JP", {
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          }));
+    // ダミーデータ
+    const dummyData = [
+      { timestamp: "2025-06-01T00:00:00", amount: 50 },
+      { timestamp: "2025-06-01T01:00:00", amount: 10 },
+      { timestamp: "2025-06-01T02:00:00", amount: 10 },
+      { timestamp: "2025-06-01T03:00:00", amount: 30 },
+      { timestamp: "2025-06-01T04:00:00", amount: 10 },
+      { timestamp: "2025-06-01T05:00:00", amount: 10 },
+      { timestamp: "2025-06-01T06:00:00", amount: 10 },
+      { timestamp: "2025-06-01T07:00:00", amount: 10 },
+      { timestamp: "2025-06-01T08:00:00", amount: 10 },
+      { timestamp: "2025-06-01T09:00:00", amount: 10 },
+      { timestamp: "2025-06-01T10:00:00", amount: 50 },
+      { timestamp: "2025-06-01T11:00:00", amount: 10 },
+      { timestamp: "2025-06-01T12:00:00", amount: 10 },
+      { timestamp: "2025-06-01T13:00:00", amount: 10 },
+      { timestamp: "2025-06-01T14:00:00", amount: 10 },
+      { timestamp: "2025-06-01T15:00:00", amount: 70 },
+      { timestamp: "2025-06-01T16:00:00", amount: 20 },
+      { timestamp: "2025-06-01T17:00:00", amount: 20 },
+      { timestamp: "2025-06-01T18:00:00", amount: 20 },
+      { timestamp: "2025-06-01T19:00:00", amount: 20 },
+      { timestamp: "2025-06-01T20:00:00", amount: 100 },
+      { timestamp: "2025-06-01T21:00:00", amount: 20 },
+      { timestamp: "2025-06-01T22:00:00", amount: 20 },
+      { timestamp: "2025-06-01T23:00:00", amount: 330 },
+    ];
 
-        setData(formatted);
-        setError(""); // エラーがあれば消す
-      } catch (err) {
-        console.error("ログ取得失敗:", err);
-        setError("ログの取得に失敗しました");
-      }
-    };
+    // const fetchLogs = async () => {
+    //   try {
+    //     const token = localStorage.getItem("token");
+    //     const res = await axios.get("http://localhost:4000/api/v1/water-log", {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //       withCredentials: true, // 認証用cookieを送信
+    //     });
 
-    fetchLogs();
+    // timestampを整形
+    //const formatted = res.data
+    const formatted = dummyData
+      .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // 昇順ソート
+      .map((log) => ({
+        ...log,
+        time: new Date(log.timestamp).toLocaleString("ja-JP", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }));
+
+    setData(formatted);
+    //     setError(""); // エラーがあれば消す
+    //   } catch (err) {
+    //     console.error("ログ取得失敗:", err);
+    //     setError("ログの取得に失敗しました");
+    //   }
+    // };
+
+    // fetchLogs();
   }, []);
 
   return (
     <div style={{ width: "100%", height: 400 }}>
-      <h2>飲水量の推移</h2>
+      <h2>一日の飲水量の推移</h2>
       <ResponsiveContainer>
         <LineChart
           data={data}
