@@ -36,14 +36,26 @@ const Home = () => {
       <div className="status-box">
         {loading && <p className="loading">読み込み中...</p>}
         {error && <p className="error">{error}</p>}
-        {!loading && !error && (
-          <p className="last-weight">
-            <strong>現在の水の量：</strong>
-            {waterLevel ?? "不明"} g
-          </p>
-        )}
+        <p className="home-title">マロンちゃんの飲水状況</p>
         <div className="circle-wrapper">
           <Circle score={waterPercentage} />
+        </div>
+        <div className="menu-now">
+          {!loading && !error && (
+            <>
+              <div className="today-sum-container">
+                <div className="today-sum">今日の合計：</div>
+                <div className="today-sum-value">200g</div>
+              </div>
+
+              <div className="remaining-amount-container">
+                <div className="remaining-amount">残りの水の残量：</div>
+                <div className="remaining-amount-value">
+                  {waterLevel ?? "不明"}g
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
