@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import "./WaterAnalysis.css";
 //import axios from "axios";
 
 const WaterLogChart = () => {
@@ -37,10 +38,10 @@ const WaterLogChart = () => {
       { timestamp: "2025-06-01T17:00:00", amount: 20 },
       { timestamp: "2025-06-01T18:00:00", amount: 20 },
       { timestamp: "2025-06-01T19:00:00", amount: 20 },
-      { timestamp: "2025-06-01T20:00:00", amount: 100 },
+      { timestamp: "2025-06-01T20:00:00", amount: 60 },
       { timestamp: "2025-06-01T21:00:00", amount: 20 },
       { timestamp: "2025-06-01T22:00:00", amount: 20 },
-      { timestamp: "2025-06-01T23:00:00", amount: 330 },
+      { timestamp: "2025-06-01T23:00:00", amount: 30 },
     ];
 
     // const fetchLogs = async () => {
@@ -85,27 +86,34 @@ const WaterLogChart = () => {
   });
 
   return (
-    <div style={{ width: "100%", height: 400 }}>
-      <h1>一日の飲水量の推移 （{todayStr}）</h1>
-      <ResponsiveContainer>
-        <LineChart
-          data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="time" />
-          <YAxis
-            label={{ value: "飲水量 (g)", angle: -90, position: "insideLeft" }}
-          />
-          <Tooltip />
-          <Line
-            type="monotone"
-            dataKey="amount"
-            stroke="#0077cc"
-            name="飲水量"
-          />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="water-analysis-container">
+      <div style={{ width: "100%", height: 400 }}>
+        <div className="water-analysis-title">一日の飲水量の推移</div>
+        <div className="water-analysis-date">{todayStr}</div>
+        <ResponsiveContainer>
+          <LineChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="time" />
+            <YAxis
+              label={{
+                value: "飲水量 (g)",
+                angle: -90,
+                position: "insideLeft",
+              }}
+            />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="amount"
+              stroke="#0077cc"
+              name="飲水量"
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
