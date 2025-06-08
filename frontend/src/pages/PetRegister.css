@@ -1,0 +1,82 @@
+.pet-setting-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pet-setting-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.pet-setting-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #444;
+  margin-top: 1rem;
+}
+
+.pet-setting-form input[type="text"],
+.pet-setting-form input[type="number"],
+.pet-setting-form input[type="date"],
+.pet-setting-form select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.pet-setting-form input[type="text"]:focus,
+.pet-setting-form input[type="number"]:focus,
+.pet-setting-form input[type="date"]:focus,
+.pet-setting-form select:focus {
+  outline: none;
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+}
+
+.pet-setting-buttons {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.pet-setting-buttons button {
+  background-color: #3b82f6; /* blue-500 */
+  color: white;
+  font-weight: 700;
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pet-setting-buttons button:hover {
+  background-color: #2563eb; /* blue-600 */
+}
+
+.pet-setting-back {
+  display: block;
+  margin: 1.5rem auto 0 auto;
+  background: transparent;
+  border: none;
+  color: #6b7280; /* gray-500 */
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.pet-setting-back:hover {
+  color: #374151; /* gray-700 */
+}
