@@ -18,6 +18,7 @@ const UserPage = () => {
           },
           withCredentials: true,
         });
+        console.log("取得したユーザー:", res.data);
         setUser(res.data.user);
       } catch (err) {
         console.error("ユーザー取得エラー:", err.response || err);
