@@ -42,10 +42,6 @@ const UserPage = () => {
         <strong>メールアドレス:</strong> {user.email}
       </p>
 
-      <p className="user-info">
-        <strong>作成日:</strong> {new Date(user.createdAt).toLocaleString()}
-      </p>
-
       <div className="user-buttons">
         <button className="user-button" onClick={() => navigate(-1)}>
           戻る
