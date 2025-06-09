@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../pages/PetEditPage.css";
 
@@ -7,10 +7,49 @@ const PetEditPage = () => {
   const location = useLocation();
   const pet = location.state?.pet;
 
-  const handleSubmit = (e) => {
+  const [name, setName] = useState(pet?.name || "");
+  const [species, setSpecies] = useState(pet?.species || "dog");
+  const [breed, setBreed] = useState(pet?.breed || "");
+  const [weightKg, setWeightKg] = useState(pet?.weightKg || "");
+  const [birthdate, setBirthdate] = useState(
+    pet?.birthdate ? pet.birthdate.slice(0, 10) : ""
+  );
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 編集送信ロジックはここに
-    alert("編集処理をここに実装してください");
+
+    const updatedPet = {
+      name,
+      species,
+      breed,
+      weightKg: parseFloat(weightKg),
+      birthdate,
+    };
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:4000/api/v1/pets/mine", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include", // クッキー送信のために必要
+        body: JSON.stringify(updatedPet),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("ペット情報が更新されました！");
+        navigate("/pet/info");
+      } else {
+        alert("更新に失敗しました: " + (data.message || JSON.stringify(data)));
+      }
+    } catch (err) {
+      console.error(err);
+      alert("通信エラーが発生しました");
+    }
   };
 
   if (!pet) {
@@ -23,26 +62,43 @@ const PetEditPage = () => {
       <form onSubmit={handleSubmit} className="edit-form">
         <label>
           名前:
-          <input type="text" defaultValue={pet.name} />
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </label>
         <label>
           種類:
-          <select defaultValue={pet.species}>
+          <select value={species} onChange={(e) => setSpecies(e.target.value)}>
             <option value="dog">犬</option>
             <option value="cat">猫</option>
           </select>
         </label>
         <label>
           品種:
-          <input type="text" defaultValue={pet.breed} />
+          <input
+            type="text"
+            value={breed}
+            onChange={(e) => setBreed(e.target.value)}
+          />
         </label>
         <label>
           体重 (kg):
-          <input type="number" step="0.1" defaultValue={pet.weightKg} />
+          <input
+            type="number"
+            step="0.1"
+            value={weightKg}
+            onChange={(e) => setWeightKg(e.target.value)}
+          />
         </label>
         <label>
           誕生日:
-          <input type="date" defaultValue={pet.birthdate?.slice(0, 10)} />
+          <input
+            type="date"
+            value={birthdate}
+            onChange={(e) => setBirthdate(e.target.value)}
+          />
         </label>
         <div className="button-group">
           <button
