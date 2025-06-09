@@ -87,7 +87,10 @@ const PetInfo = () => {
           <p>体重: {pet.weightKg} kg</p>
           <p>誕生日: {formatDate(pet.birthdate)}</p>
           <div className="button-group">
-            <button className="btn btn-back" onClick={() => navigate("/pet")}>
+            <button
+              className="btn btn-back"
+              onClick={() => navigate("/setting")}
+            >
               戻る
             </button>
             <button
