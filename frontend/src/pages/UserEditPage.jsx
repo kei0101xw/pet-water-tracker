@@ -23,18 +23,29 @@ const UserEditPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:4000/api/v1/auth/me`, // ← エンドポイントは適宜変更
-        { username, email },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-      // 成功したらユーザーページへ戻る
-      navigate("/");
+      const res = await fetch("http://localhost:4000/api/v1/users", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          username,
+          email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("ユーザー情報が更新されました！");
+        navigate("/");
+      } else {
+        setError(
+          "更新に失敗しました。" + (data.message || JSON.stringify(data))
+        );
+      }
     } catch (err) {
       console.error("更新エラー:", err);
       setError("更新に失敗しました。");
