@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../pages/Login.css";
 
@@ -29,40 +29,40 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h1 className="app-title">ペット水量計測アプリ</h1>
-      <div className="login-box">
-        {/* <h2 className="login-title">ログイン</h2> */}
-        <form onSubmit={handleLogin} className="login-form">
-          <input
-            type="email"
-            placeholder="メールアドレス"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="login-input"
-          />
-          <input
-            type="password"
-            placeholder="パスワード"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="login-input"
-          />
-          <button type="submit" className="login-button submit">
-            ログイン
-          </button>
-          <button
-            type="button"
-            className="login-button register"
-            onClick={() => navigate("/user/register")}
-          >
-            新規登録の方はこちら
-          </button>
+      <h1 className="app-title">ログイン</h1>
+      <form onSubmit={handleLogin} className="login-form">
+        <input
+          type="email"
+          placeholder="メールアドレス"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="login-input"
+        />
+        <input
+          type="password"
+          placeholder="パスワード"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="login-input"
+        />
+        <Link to="*" className="password-forget-message">
+          パスワードをお忘れですか？
+        </Link>
+        <button type="submit" className="login-button submit">
+          ログイン
+        </button>
+        <button
+          type="button"
+          className="login-button register"
+          onClick={() => navigate("/user/register")}
+        >
+          新規登録の方はこちら
+        </button>
 
-          {message && <p className="login-message">{message}</p>}
-        </form>
-      </div>
+        {message && <p className="login-message">{message}</p>}
+      </form>
     </div>
   );
 };
