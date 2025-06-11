@@ -49,9 +49,9 @@
 }
 
 .login-button.register {
-  background-color: rgb(255, 255, 255);
+  border: 1.5px solid rgb(54 145 220);
+  background-color: white;
   color: rgb(54 145 220);
-  border-color: rgb(54 145 220);
 }
 
 .login-message {
