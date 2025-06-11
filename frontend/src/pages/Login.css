@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-family: "Arial", sans-serif;
   background-color: #ffffff;
   margin-top: 150px;
@@ -15,30 +14,26 @@
   color: #333333;
 }
 
-.login-container {
-  width: 400px;
-}
-
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
   align-items: center;
-  width: 80%;
+  width: 400px;
 }
 
 .login-input {
-  width: 100%;
-  height: 20px;
+  width: 80%;
+  height: 40px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 16px;
+  box-sizing: border-box;
 }
 
 .login-button {
   display: block;
-  width: 100%;
+  width: 80%;
   margin: 6px 0;
   padding: 10px;
   font-size: 14px;
