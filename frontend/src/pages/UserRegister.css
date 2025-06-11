@@ -1,66 +1,66 @@
 .user-setting-container {
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 30px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  margin-top: 150px;
+}
+
+.login-input-label {
+  color: #333333;
 }
 
 .user-setting-title {
   text-align: center;
   font-size: 24px;
   margin-bottom: 30px;
-  color: #333;
+  color: #333333;
 }
 
 .user-setting-form {
   display: flex;
   flex-direction: column;
-}
-
-.user-setting-form label {
-  margin-bottom: 15px;
-  font-size: 16px;
-  color: #444;
+  align-items: center;
+  gap: 12px;
+  width: 400px;
 }
 
 .user-setting-form input {
-  width: 100%;
+  width: 300px;
   padding: 10px;
   margin-top: 5px;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
+  box-sizing: border-box;
+}
+
+.register-button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  gap: 20px;
 }
 
 .user-setting-save,
 .user-setting-back {
-  padding: 12px;
-  margin-top: 20px;
-  font-size: 16px;
-  border: none;
+  width: 300px;
+  height: 40px;
+  font-size: 14px;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .user-setting-save {
-  background-color: #4caf50;
+  border: none;
+  background-color: rgb(54 145 220);
   color: white;
 }
 
-.user-setting-save:hover {
-  background-color: #45a049;
-}
-
 .user-setting-back {
-  background-color: #ccc;
-  color: #333;
-  margin-top: 10px;
-}
-
-.user-setting-back:hover {
-  background-color: #bbb;
+  border: 1.5px solid rgb(54 145 220);
+  background-color: white;
+  color: rgb(54 145 220);
 }

@@ -35,45 +35,50 @@ const UserRegister = () => {
 
   return (
     <div className="user-setting-container">
-      <h1 className="user-setting-title">ユーザー設定</h1>
+      <h1 className="user-setting-title">新規登録</h1>
       <form onSubmit={handleSubmit} className="user-setting-form">
         <label>
-          ユーザー名:
+          <div className="login-input-label">ユーザー名:</div>
           <input
             type="String"
             name="username"
+            placeholder="ユーザー名"
             value={user.username}
             onChange={handleChange}
           />
         </label>
         <label>
-          メールアドレス:
+          <div className="login-input-label">メールアドレス:</div>
           <input
             type="email"
             name="email"
+            placeholder="メールアドレス"
             value={user.email}
             onChange={handleChange}
           />
         </label>
         <label>
-          パスワード:
+          <div className="login-input-label">パスワード:</div>
           <input
             type="password"
             name="password"
+            placeholder="パスワード"
             value={user.password}
             onChange={handleChange}
           />
         </label>
-        <button type="submit" className="user-setting-save">
-          次へ
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate("/login")}
-          className="user-setting-back"
-        >
-          戻る
-        </button>
+        <div className="register-button-group">
+          <button type="submit" className="user-setting-save">
+            確認画面へ
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="user-setting-back"
+          >
+            戻る
+          </button>
+        </div>
       </form>
     </div>
   );
