@@ -9,91 +9,164 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import "./WaterAnalysis.css";
+import { useSwipeable } from "react-swipeable";
 //import axios from "axios";
 
 const WaterLogChart = () => {
   const [rawData, setRawData] = useState([]);
   const [chartData, setChartData] = useState([]);
-  const [error, setError] = useState("");
   const [mode, setMode] = useState("daily");
+  const [currentDate, setCurrentDate] = useState(new Date("2025-06-01"));
+  const [timeWindowIndex, setTimeWindowIndex] = useState(0);
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => setTimeWindowIndex((prev) => Math.min(prev + 1, 3)),
+    onSwipedRight: () => setTimeWindowIndex((prev) => Math.max(prev - 1, 0)),
+    preventScrollOnSwipe: true,
+    trackTouch: true,
+  });
+
+  const dailyDummyData = [
+    // 2025-05-31
+    { timestamp: "2025-05-31T10:00:00", amount: 20 },
+    { timestamp: "2025-05-31T14:00:00", amount: 30 },
+
+    // 2025-06-02
+    { timestamp: "2025-06-02T08:00:00", amount: 20 },
+    { timestamp: "2025-06-02T12:00:00", amount: 50 },
+    { timestamp: "2025-06-02T18:00:00", amount: 40 },
+    { timestamp: "2025-06-01T00:00:00", amount: 50 },
+
+    // { timestamp: "2025-06-01T01:00:00", amount: 10 },
+    // { timestamp: "2025-06-01T02:00:00", amount: 10 },
+    // { timestamp: "2025-06-01T03:00:00", amount: 30 },
+    // { timestamp: "2025-06-01T04:00:00", amount: 10 },
+    { timestamp: "2025-06-01T05:00:00", amount: 10 },
+    { timestamp: "2025-06-01T05:30:00", amount: 30 },
+    { timestamp: "2025-06-01T06:00:00", amount: 10 },
+    { timestamp: "2025-06-01T07:00:00", amount: 10 },
+    { timestamp: "2025-06-01T08:00:00", amount: 10 },
+    { timestamp: "2025-06-01T09:00:00", amount: 10 },
+    { timestamp: "2025-06-01T10:00:00", amount: 50 },
+    { timestamp: "2025-06-01T11:00:00", amount: 10 },
+    { timestamp: "2025-06-01T12:00:00", amount: 10 },
+    { timestamp: "2025-06-01T13:00:00", amount: 10 },
+    { timestamp: "2025-06-01T14:00:00", amount: 10 },
+    { timestamp: "2025-06-01T15:00:00", amount: 70 },
+    { timestamp: "2025-06-01T16:00:00", amount: 20 },
+    { timestamp: "2025-06-01T17:00:00", amount: 20 },
+    { timestamp: "2025-06-01T18:00:00", amount: 20 },
+    { timestamp: "2025-06-01T19:00:00", amount: 20 },
+    { timestamp: "2025-06-01T20:00:00", amount: 60 },
+    { timestamp: "2025-06-01T21:00:00", amount: 20 },
+
+    { timestamp: "2025-06-01T23:00:00", amount: 30 },
+
+    { timestamp: "2025-06-03T00:00:00", amount: 0 },
+    { timestamp: "2025-06-03T01:00:00", amount: 10 },
+    { timestamp: "2025-06-03T02:00:00", amount: 10 },
+    { timestamp: "2025-06-03T03:00:00", amount: 30 },
+    { timestamp: "2025-06-03T04:00:00", amount: 10 },
+    { timestamp: "2025-06-03T05:00:00", amount: 10 },
+    { timestamp: "2025-06-03T06:00:00", amount: 10 },
+    { timestamp: "2025-06-03T07:00:00", amount: 10 },
+    { timestamp: "2025-06-03T08:00:00", amount: 10 },
+    { timestamp: "2025-06-03T09:00:00", amount: 10 },
+    { timestamp: "2025-06-03T10:00:00", amount: 50 },
+    { timestamp: "2025-06-03T11:00:00", amount: 10 },
+    { timestamp: "2025-06-03T12:00:00", amount: 10 },
+    { timestamp: "2025-06-03T13:00:00", amount: 10 },
+    { timestamp: "2025-06-03T14:00:00", amount: 10 },
+    { timestamp: "2025-06-03T15:00:00", amount: 70 },
+    { timestamp: "2025-06-03T16:00:00", amount: 20 },
+    { timestamp: "2025-06-03T17:00:00", amount: 20 },
+    { timestamp: "2025-06-03T18:00:00", amount: 20 },
+    { timestamp: "2025-06-03T19:00:00", amount: 20 },
+    { timestamp: "2025-06-03T20:00:00", amount: 60 },
+    { timestamp: "2025-06-03T21:00:00", amount: 20 },
+    { timestamp: "2025-06-03T22:00:00", amount: 20 },
+    { timestamp: "2025-06-03T23:00:00", amount: 30 },
+  ];
+
+  const weeklyDummyData = [
+    { date: "2025-05-31", amount: 300 },
+    { date: "2025-06-01", amount: 400 },
+    { date: "2025-06-02", amount: 300 },
+    { date: "2025-06-03", amount: 350 },
+    { date: "2025-06-04", amount: 280 },
+    { date: "2025-06-05", amount: 390 },
+    { date: "2025-06-06", amount: 420 },
+    { date: "2025-06-07", amount: 310 },
+  ];
 
   useEffect(() => {
-    // ダミーデータ
-    const dummyData = [
-      // { timestamp: "2025-06-01T00:00:00", amount: 50 },
-      // { timestamp: "2025-06-01T01:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T02:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T03:00:00", amount: 30 },
-      // { timestamp: "2025-06-01T04:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T05:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T06:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T07:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T08:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T09:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T10:00:00", amount: 50 },
-      // { timestamp: "2025-06-01T11:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T12:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T13:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T14:00:00", amount: 10 },
-      // { timestamp: "2025-06-01T15:00:00", amount: 70 },
-      // { timestamp: "2025-06-01T16:00:00", amount: 20 },
-      // { timestamp: "2025-06-01T17:00:00", amount: 20 },
-      // { timestamp: "2025-06-01T18:00:00", amount: 20 },
-      // { timestamp: "2025-06-01T19:00:00", amount: 20 },
-      // { timestamp: "2025-06-01T20:00:00", amount: 60 },
-      // { timestamp: "2025-06-01T21:00:00", amount: 20 },
-      // { timestamp: "2025-06-01T22:00:00", amount: 20 },
-      // { timestamp: "2025-06-01T23:00:00", amount: 30 },
-    ];
-
-    const generateDummyData = () => {
-      for (let d = 1; d <= 7; d++) {
-        for (let h = 0; h < 24; h++) {
-          dummyData.push({
-            timestamp: `2025-06-0${d}T${String(h).padStart(2, "0")}:00:00`,
-            amount: Math.floor(Math.random() * 70),
-          });
-        }
-      }
-    };
-    generateDummyData();
-    setRawData(dummyData);
-  }, []);
+    setRawData(mode === "daily" ? dailyDummyData : weeklyDummyData);
+  }, [mode]);
 
   useEffect(() => {
+    if (!rawData || rawData.length === 0) return;
+
     if (mode === "daily") {
-      const today = "2025-06-01";
-      const dailyData = rawData
-        .filter((log) => log.timestamp.startsWith(today))
-        .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-        .map((log) => ({
-          ...log,
-          time: new Date(log.timestamp).toLocaleTimeString("ja-JP", {
+      const today = currentDate.toISOString().slice(0, 10);
+      const fullDay = Array.from({ length: 24 * 60 }, (_, i) => {
+        const hour = Math.floor(i / 60);
+        const minute = i % 60;
+        const time = new Date(
+          `${today}T${String(hour).padStart(2, "0")}:${String(minute).padStart(
+            2,
+            "0"
+          )}:00`
+        );
+        return {
+          timestamp: time.toISOString(),
+          time: time.toLocaleTimeString("ja-JP", {
             hour: "2-digit",
             minute: "2-digit",
           }),
-        }));
-      setChartData(dailyData);
-    } else if (mode === "weekly") {
-      // 日付ごとに合計
-      const grouped = rawData.reduce((acc, log) => {
-        const date = log.timestamp.slice(0, 10);
-        acc[date] = (acc[date] || 0) + log.amount;
-        return acc;
-      }, {});
+          amount: 0,
+        };
+      });
 
-      const weeklyData = Object.entries(grouped).map(([date, amount]) => ({
-        date: new Date(date).toLocaleDateString("ja-JP", {
+      const logs = rawData.filter((log) => log.timestamp.startsWith(today));
+      const filled = fullDay.map((entry) => {
+        const match = logs.find(
+          (log) =>
+            new Date(log.timestamp).getHours() ===
+              new Date(entry.timestamp).getHours() &&
+            new Date(log.timestamp).getMinutes() ===
+              new Date(entry.timestamp).getMinutes()
+        );
+        return match ? { ...entry, amount: match.amount } : entry;
+      });
+
+      // const dailyData = rawData
+      //   .filter((log) => log.timestamp.startsWith(today))
+      //   .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+      //   .map((log) => ({
+      //     ...log,
+      //     time: new Date(log.timestamp).toLocaleTimeString("ja-JP", {
+      //       hour: "2-digit",
+      //       minute: "2-digit",
+      //     }),
+      //   }));
+      const start = timeWindowIndex * 360;
+      const end = start + 360;
+      const sliced = filled.slice(start, end);
+
+      setChartData(sliced);
+    } else {
+      const weeklyData = rawData.map((entry) => ({
+        date: new Date(entry.date).toLocaleDateString("ja-JP", {
           weekday: "short",
           month: "2-digit",
           day: "2-digit",
         }),
-        amount,
+        amount: entry.amount,
       }));
 
       setChartData(weeklyData);
     }
-  }, [mode, rawData]);
+  }, [rawData, currentDate, timeWindowIndex]);
 
   // const fetchLogs = async () => {
   //   try {
@@ -136,6 +209,22 @@ const WaterLogChart = () => {
   //   weekday: "short",
   // });
 
+  const handlePrevDay = () => {
+    setCurrentDate((prev) => new Date(prev.getTime() - 86400000)); // 1日引く
+  };
+
+  const handleNextDay = () => {
+    setCurrentDate((prev) => new Date(prev.getTime() + 86400000)); // 1日足す
+  };
+
+  const formatDate = (date) =>
+    date.toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "short",
+    });
+
   return (
     <div className="water-analysis-container">
       <div className="water-analysis-sub-container">
@@ -158,22 +247,48 @@ const WaterLogChart = () => {
           </button>
         </div>
 
-        <div className="water-analysis-date">
-          {mode === "daily" ? "2025年6月1日（日）" : "2025年6月1日〜6月7日"}
-        </div>
+        {mode === "daily" && (
+          <>
+            <div className="water-analysis-date">
+              <button onClick={handlePrevDay}>＜</button>
+              <span style={{ margin: "0 10px" }}>
+                {formatDate(currentDate)}
+              </span>
+              <button onClick={handleNextDay}>＞</button>
+            </div>
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "8px",
+                marginBottom: "12px",
+                fontWeight: "bold",
+              }}
+            >
+              {`${timeWindowIndex * 6}:00 〜 ${
+                (timeWindowIndex + 1) * 6 - 1
+              }:59`}
+            </div>
+          </>
+        )}
 
-        {/* <div className="water-analysis-date">{todayStr}</div> */}
-        <div style={{ width: "100%", height: 400 }}>
+        <div style={{ width: "100%", height: 400 }} {...swipeHandlers}>
           {chartData.length === 0 ? (
             <p>データがありません</p>
           ) : (
-            <ResponsiveContainer>
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={chartData}
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                barSize={10}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={mode === "daily" ? "time" : "date"} />
+                <XAxis
+                  dataKey={mode === "daily" ? "time" : "date"}
+                  angle={-45}
+                  textAnchor="end"
+                  interval={mode === "daily" ? 59 : 0}
+                  height={80}
+                />
                 <YAxis
                   label={{
                     value: "飲水量 (g)",
