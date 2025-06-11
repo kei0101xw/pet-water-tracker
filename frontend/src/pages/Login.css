@@ -12,33 +12,25 @@
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
+  color: #333333;
 }
 
-.login-box {
-  background-color: #96b8da;
-  padding: 15px 0;
-  border-radius: 12px;
-  width: 280px;
-  height: 300px;
-  margin: 30px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.login-title {
-  font-size: 20px;
-  margin-bottom: 30px;
-  margin-top: 30px;
+.login-container {
+  width: 400px;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  align-items: center;
+  width: 80%;
 }
 
 .login-input {
-  padding: 10px 12px;
+  width: 100%;
+  height: 20px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 16px;
@@ -46,33 +38,25 @@
 
 .login-button {
   display: block;
-  width: 60%;
+  width: 100%;
   margin: 6px 0;
-  padding: 8px;
+  padding: 10px;
   font-size: 14px;
   cursor: pointer;
-  border: none;
   border-radius: 8px;
-  color: black;
   transition: background-color 0.3s;
 }
 
 .login-button.submit {
-  background-color: #599c8f;
-  color: #fff;
-  transition: background-color 0.3s;
-}
-
-.login-button.submit:hover {
-  background-color: #2563eb;
+  background-color: rgb(54 145 220);
+  color: white;
+  border: none;
 }
 
 .login-button.register {
-  background-color: #76f79a;
-}
-
-.login-button.register:hover {
-  background-color: #d1d5db;
+  background-color: rgb(255, 255, 255);
+  color: rgb(54 145 220);
+  border-color: rgb(54 145 220);
 }
 
 .login-message {
@@ -80,4 +64,8 @@
   font-size: 14px;
   color: #4b5563;
   text-align: center;
+}
+
+.password-forget-message {
+  cursor: pointer;
 }
