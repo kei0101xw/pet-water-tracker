@@ -18,22 +18,23 @@ const BowlConfirm = () => {
   const handleRegister = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("/api/waterbowls", {
+      const res = await fetch("http://localhost:4000/api/v1/water-bowl", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ bowlWeight }),
+        credentials: "include",
       });
 
-      if (!response.ok) {
-        const error = await response.json();
+      if (!res.ok) {
+        const error = await res.json();
         throw new Error(error || "登録に失敗しました");
       }
 
       alert("皿の登録が完了しました！");
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       alert(err.message);
     }
