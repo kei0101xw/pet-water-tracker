@@ -207,7 +207,7 @@ const WaterLogChart = () => {
                 key={mode}
                 data={chartData}
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                barSize={10}
+                barSize={mode === "daily" ? 30 : 100}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
