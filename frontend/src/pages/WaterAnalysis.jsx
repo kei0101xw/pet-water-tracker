@@ -10,7 +10,6 @@ import {
 } from "recharts";
 import "./WaterAnalysis.css";
 import { useSwipeable } from "react-swipeable";
-//import axios from "axios";
 
 const WaterLogChart = () => {
   const [rawData, setRawData] = useState([]);
@@ -26,82 +25,46 @@ const WaterLogChart = () => {
     trackTouch: true,
   });
 
-  const dailyDummyData = [
-    // 2025-05-31
-    { timestamp: "2025-05-31T10:00:00", amount: 20 },
-    { timestamp: "2025-05-31T14:00:00", amount: 30 },
-
-    // 2025-06-02
-    { timestamp: "2025-06-02T08:00:00", amount: 20 },
-    { timestamp: "2025-06-02T12:00:00", amount: 50 },
-    { timestamp: "2025-06-02T18:00:00", amount: 40 },
-    { timestamp: "2025-06-01T00:00:00", amount: 50 },
-
-    // { timestamp: "2025-06-01T01:00:00", amount: 10 },
-    // { timestamp: "2025-06-01T02:00:00", amount: 10 },
-    // { timestamp: "2025-06-01T03:00:00", amount: 30 },
-    // { timestamp: "2025-06-01T04:00:00", amount: 10 },
-    { timestamp: "2025-06-01T05:00:00", amount: 10 },
-    { timestamp: "2025-06-01T05:30:00", amount: 30 },
-    { timestamp: "2025-06-01T06:00:00", amount: 10 },
-    { timestamp: "2025-06-01T07:00:00", amount: 10 },
-    { timestamp: "2025-06-01T08:00:00", amount: 10 },
-    { timestamp: "2025-06-01T09:00:00", amount: 10 },
-    { timestamp: "2025-06-01T10:00:00", amount: 50 },
-    { timestamp: "2025-06-01T11:00:00", amount: 10 },
-    { timestamp: "2025-06-01T12:00:00", amount: 10 },
-    { timestamp: "2025-06-01T13:00:00", amount: 10 },
-    { timestamp: "2025-06-01T14:00:00", amount: 10 },
-    { timestamp: "2025-06-01T15:00:00", amount: 70 },
-    { timestamp: "2025-06-01T16:00:00", amount: 20 },
-    { timestamp: "2025-06-01T17:00:00", amount: 20 },
-    { timestamp: "2025-06-01T18:00:00", amount: 20 },
-    { timestamp: "2025-06-01T19:00:00", amount: 20 },
-    { timestamp: "2025-06-01T20:00:00", amount: 60 },
-    { timestamp: "2025-06-01T21:00:00", amount: 20 },
-
-    { timestamp: "2025-06-01T23:00:00", amount: 30 },
-
-    { timestamp: "2025-06-03T00:00:00", amount: 0 },
-    { timestamp: "2025-06-03T01:00:00", amount: 10 },
-    { timestamp: "2025-06-03T02:00:00", amount: 10 },
-    { timestamp: "2025-06-03T03:00:00", amount: 30 },
-    { timestamp: "2025-06-03T04:00:00", amount: 10 },
-    { timestamp: "2025-06-03T05:00:00", amount: 10 },
-    { timestamp: "2025-06-03T06:00:00", amount: 10 },
-    { timestamp: "2025-06-03T07:00:00", amount: 10 },
-    { timestamp: "2025-06-03T08:00:00", amount: 10 },
-    { timestamp: "2025-06-03T09:00:00", amount: 10 },
-    { timestamp: "2025-06-03T10:00:00", amount: 50 },
-    { timestamp: "2025-06-03T11:00:00", amount: 10 },
-    { timestamp: "2025-06-03T12:00:00", amount: 10 },
-    { timestamp: "2025-06-03T13:00:00", amount: 10 },
-    { timestamp: "2025-06-03T14:00:00", amount: 10 },
-    { timestamp: "2025-06-03T15:00:00", amount: 70 },
-    { timestamp: "2025-06-03T16:00:00", amount: 20 },
-    { timestamp: "2025-06-03T17:00:00", amount: 20 },
-    { timestamp: "2025-06-03T18:00:00", amount: 20 },
-    { timestamp: "2025-06-03T19:00:00", amount: 20 },
-    { timestamp: "2025-06-03T20:00:00", amount: 60 },
-    { timestamp: "2025-06-03T21:00:00", amount: 20 },
-    { timestamp: "2025-06-03T22:00:00", amount: 20 },
-    { timestamp: "2025-06-03T23:00:00", amount: 30 },
-  ];
-
-  const weeklyDummyData = [
-    { date: "2025-05-31", amount: 300 },
-    { date: "2025-06-01", amount: 400 },
-    { date: "2025-06-02", amount: 300 },
-    { date: "2025-06-03", amount: 350 },
-    { date: "2025-06-04", amount: 280 },
-    { date: "2025-06-05", amount: 390 },
-    { date: "2025-06-06", amount: 420 },
-    { date: "2025-06-07", amount: 310 },
-  ];
-
   useEffect(() => {
-    setRawData(mode === "daily" ? dailyDummyData : weeklyDummyData);
-  }, [mode]);
+    const fetchLogs = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:4000/api/v1/water-log", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (mode === "daily") {
+          const sorted = data.sort(
+            (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+          );
+          setRawData(sorted);
+        } else {
+          const groupedByDate = data.reduce((acc, log) => {
+            const date = log.timestamp.slice(0, 10);
+            acc[date] = (acc[date] || 0) + log.amount;
+            return acc;
+          }, {});
+          const result = Object.entries(groupedByDate).map(
+            ([date, amount]) => ({
+              date,
+              amount,
+            })
+          );
+          setRawData(result);
+        }
+      } catch (err) {
+        console.error("ログ取得失敗:", err);
+      }
+    };
+
+    fetchLogs();
+  }, [mode, currentDate]);
 
   useEffect(() => {
     if (!rawData || rawData.length === 0) return;
@@ -139,16 +102,6 @@ const WaterLogChart = () => {
         return match ? { ...entry, amount: match.amount } : entry;
       });
 
-      // const dailyData = rawData
-      //   .filter((log) => log.timestamp.startsWith(today))
-      //   .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-      //   .map((log) => ({
-      //     ...log,
-      //     time: new Date(log.timestamp).toLocaleTimeString("ja-JP", {
-      //       hour: "2-digit",
-      //       minute: "2-digit",
-      //     }),
-      //   }));
       const start = timeWindowIndex * 360;
       const end = start + 360;
       const sliced = filled.slice(start, end);
@@ -168,53 +121,19 @@ const WaterLogChart = () => {
     }
   }, [rawData, currentDate, timeWindowIndex]);
 
-  // const fetchLogs = async () => {
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     const res = await axios.get("http://localhost:4000/api/v1/water-log", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       withCredentials: true, // 認証用cookieを送信
-  //     });
-
-  // timestampを整形
-  //const formatted = res.data
-  // const formatted = dummyData
-  //   .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // 昇順ソート
-  //   .map((log) => ({
-  //     ...log,
-  //     time: new Date(log.timestamp).toLocaleString("ja-JP", {
-  //       hour: "2-digit",
-  //       minute: "2-digit",
-  //     }),
-  //   }));
-
-  // setData(formatted);
-  //     setError(""); // エラーがあれば消す
-  //   } catch (err) {
-  //     console.error("ログ取得失敗:", err);
-  //     setError("ログの取得に失敗しました");
-  //   }
-  // };
-
-  // fetchLogs();
-  // }, []);
-
-  // const today = new Date();
-  // const todayStr = today.toLocaleDateString("ja-JP", {
-  //   year: "numeric",
-  //   month: "long",
-  //   day: "numeric",
-  //   weekday: "short",
-  // });
+  useEffect(() => {
+    console.log("rawData:", rawData);
+    console.log("chartData:", chartData);
+  }, [chartData]);
 
   const handlePrevDay = () => {
-    setCurrentDate((prev) => new Date(prev.getTime() - 86400000)); // 1日引く
+    setCurrentDate((prev) => new Date(prev.getTime() - 86400000));
+    setTimeWindowIndex(0);
   };
 
   const handleNextDay = () => {
-    setCurrentDate((prev) => new Date(prev.getTime() + 86400000)); // 1日足す
+    setCurrentDate((prev) => new Date(prev.getTime() + 86400000));
+    setTimeWindowIndex(0);
   };
 
   const formatDate = (date) =>
