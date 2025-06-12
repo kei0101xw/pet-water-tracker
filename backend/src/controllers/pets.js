@@ -1,5 +1,23 @@
 const Pet = require("../models/Pet");
 
+const calculateWaterIntake = (species, weightKg) => {
+  if (!species || !weightKg) return { recommended: null, dangerous: null };
+
+  if (species === "dog") {
+    return {
+      recommended: weightKg * 50,
+      dangerous: weightKg * 90,
+    };
+  } else if (species === "cat") {
+    return {
+      recommended: weightKg * 25,
+      dangerous: weightKg * 45,
+    };
+  } else {
+    return { recommended: null, dangerous: null };
+  }
+};
+
 const createPet = async (req, res) => {
   try {
     const existingPet = await Pet.findOne({ userId: req.user.id });
@@ -7,10 +25,18 @@ const createPet = async (req, res) => {
       return res.status(400).json("既にペットが登録されています");
     }
 
+    const { recommended, dangerous } = calculateWaterIntake(
+      req.body.species,
+      req.body.weightKg
+    );
+
     const newPet = await Pet.create({
       ...req.body,
       userId: req.user.id,
+      recommendedWaterMl: recommended,
+      dangerousWaterMl: dangerous,
     });
+
     res.status(200).json(newPet);
   } catch (err) {
     res.status(500).json(err);
@@ -35,6 +61,19 @@ const updatePet = async (req, res) => {
     if (!pet) return res.status(404).json("登録された情報が見つかりません");
 
     const { userId, ...updateData } = req.body;
+
+    // species または weightKg を更新する場合、新しい水分量も再計算
+    if (updateData.species || updateData.weightKg) {
+      const species = updateData.species || pet.species;
+      const weightKg = updateData.weightKg || pet.weightKg;
+      const { recommended, dangerous } = calculateWaterIntake(
+        species,
+        weightKg
+      );
+
+      updateData.recommendedWaterMl = recommended;
+      updateData.dangerousWaterMl = dangerous;
+    }
 
     const updatedPet = await Pet.findOneAndUpdate(
       { userId: req.user.id },
