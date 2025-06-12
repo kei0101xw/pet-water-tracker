@@ -1,17 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const { verifyToken } = require("../middleware/verifyToken");
+const { verifyToken, verifySensorToken } = require("../middleware/verifyToken");
 const {
   createWaterBowl,
   getWaterBowl,
   updateBowlWeight,
+  updateMaxWaterLevel,
   updateWaterLevel,
   deleteBowl,
 } = require("../controllers/waterBowl");
 
-router.post("/", verifyToken, createWaterBowl);
+router.post("/", verifySensorToken, createWaterBowl);
 router.get("/", verifyToken, getWaterBowl);
-router.put("/bowl-weight", verifyToken, updateBowlWeight);
+router.put("/bowl-weight", verifySensorToken, updateBowlWeight);
+router.put("/max-water-level", verifySensorToken, updateMaxWaterLevel);
 router.put("/water-level", verifyToken, updateWaterLevel);
 router.delete("/", verifyToken, deleteBowl);
 
