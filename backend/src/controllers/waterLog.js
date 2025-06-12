@@ -102,7 +102,9 @@ const getLogsByDate = async (req, res) => {
         $gte: startUTC,
         $lte: endUTC,
       },
-    }).sort({ timestamp: 1 });
+    })
+      .select("timestamp amount -_id")
+      .sort({ timestamp: 1 });
 
     res.status(200).json(logs);
   } catch (err) {
