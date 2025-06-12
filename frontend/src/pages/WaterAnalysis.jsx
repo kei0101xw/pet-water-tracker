@@ -16,16 +16,18 @@ const WaterLogChart = () => {
   const [mode, setMode] = useState("daily");
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  // JST補正は不要（ブラウザは基本JST）
   const getJSTDateString = (date) => {
-    const jst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
-    return jst.toISOString().slice(0, 10);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const token = localStorage.getItem("token");
-        const petId = localStorage.getItem("petId");
         const baseUrl = "http://localhost:4000/api/v1";
         let url = "";
         const jstDate = getJSTDateString(currentDate);
@@ -65,14 +67,7 @@ const WaterLogChart = () => {
       const fullDay = Array.from({ length: 1440 }, (_, i) => {
         const hour = Math.floor(i / 60);
         const minute = i % 60;
-        const time = new Date(
-          `${today}T${String(hour).padStart(2, "0")}:${String(minute).padStart(
-            2,
-            "0"
-          )}:00+09:00`
-        );
         return {
-          timestamp: time.toISOString(),
           time: `${String(hour).padStart(2, "0")}:${String(minute).padStart(
             2,
             "0"
@@ -81,15 +76,18 @@ const WaterLogChart = () => {
         };
       });
 
-      const logs = rawData.filter((log) => log.timestamp.startsWith(today));
-      const filled = fullDay.map((entry) => {
-        const match = logs.find(
-          (log) =>
-            new Date(log.timestamp).getHours() ===
-              new Date(entry.timestamp).getHours() &&
-            new Date(log.timestamp).getMinutes() ===
-              new Date(entry.timestamp).getMinutes()
-        );
+      const logs = rawData.filter((log) => {
+        const logDate = new Date(log.timestamp);
+        return getJSTDateString(logDate) === today;
+      });
+
+      const filled = fullDay.map((entry, i) => {
+        const hour = Math.floor(i / 60);
+        const minute = i % 60;
+        const match = logs.find((log) => {
+          const logDate = new Date(log.timestamp);
+          return logDate.getHours() === hour && logDate.getMinutes() === minute;
+        });
         return match ? { ...entry, amount: match.amount } : entry;
       });
 
@@ -100,6 +98,7 @@ const WaterLogChart = () => {
           weekday: "short",
           month: "2-digit",
           day: "2-digit",
+          timeZone: "Asia/Tokyo",
         }),
         amount: amount,
       }));
@@ -141,20 +140,21 @@ const WaterLogChart = () => {
       month: "long",
       day: "numeric",
       weekday: "short",
+      timeZone: "Asia/Tokyo",
     });
 
   const formatWeekRange = (date) => {
     const start = new Date(date);
-    start.setDate(start.getDate() - start.getDay() - 6); // 日曜日
+    start.setDate(start.getDate() - start.getDay() - 6);
     const end = new Date(start);
-    end.setDate(start.getDate() + 6); // 土曜日
+    end.setDate(start.getDate() + 6);
     const format = (d) =>
       d.toLocaleDateString("ja-JP", {
         month: "long",
         day: "numeric",
         weekday: "short",
+        timeZone: "Asia/Tokyo",
       });
-
     return `${format(start)} ～ ${format(end)}`;
   };
 
@@ -214,7 +214,7 @@ const WaterLogChart = () => {
                   dataKey={mode === "daily" ? "time" : "date"}
                   angle={-45}
                   textAnchor="end"
-                  interval={mode === "daily" ? 59 : 0} // 毎時1回表示
+                  interval={mode === "daily" ? 59 : 0}
                   height={80}
                 />
                 <YAxis
