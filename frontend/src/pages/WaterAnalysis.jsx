@@ -15,7 +15,7 @@ const WaterLogChart = () => {
   const [rawData, setRawData] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [mode, setMode] = useState("daily");
-  const [currentDate, setCurrentDate] = useState(new Date("2025-06-01"));
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [timeWindowIndex, setTimeWindowIndex] = useState(0);
 
   const swipeHandlers = useSwipeable({
@@ -46,7 +46,7 @@ const WaterLogChart = () => {
           const weekStart = new Date(currentDate);
           weekStart.setDate(weekStart.getDate() - weekStart.getDay());
           const weekStr = getJSTDateString(weekStart);
-          url = `${baseUrl}/water-log/week?week=${weekStr}&petId=${petId}`;
+          url = `${baseUrl}/water-log/week?week=${weekStr}`;
         }
 
         const res = await fetch(url, {
@@ -108,17 +108,21 @@ const WaterLogChart = () => {
       const end = start + 360;
       setChartData(filled.slice(start, end));
     } else {
-      const weeklyData = rawData.map((entry) => ({
-        date: new Date(entry.date).toLocaleDateString("ja-JP", {
+      const weeklyData = Object.entries(rawData).map(([dateStr, amount]) => ({
+        date: new Date(dateStr).toLocaleDateString("ja-JP", {
           weekday: "short",
           month: "2-digit",
           day: "2-digit",
         }),
-        amount: entry.amount,
+        amount: amount,
       }));
       setChartData(weeklyData);
     }
   }, [rawData, currentDate, timeWindowIndex]);
+
+  useEffect(() => {
+    setChartData([]);
+  }, [mode]);
 
   const handlePrevDay = () => {
     setCurrentDate((prev) => new Date(prev.getTime() - 86400000));
@@ -130,6 +134,22 @@ const WaterLogChart = () => {
     setTimeWindowIndex(0);
   };
 
+  const handlePrevWeek = () => {
+    setCurrentDate((prev) => {
+      const newDate = new Date(prev);
+      newDate.setDate(prev.getDate() - 7);
+      return newDate;
+    });
+  };
+
+  const handleNextWeek = () => {
+    setCurrentDate((prev) => {
+      const newDate = new Date(prev);
+      newDate.setDate(prev.getDate() + 7);
+      return newDate;
+    });
+  };
+
   const formatDate = (date) =>
     date.toLocaleDateString("ja-JP", {
       year: "numeric",
@@ -137,6 +157,21 @@ const WaterLogChart = () => {
       day: "numeric",
       weekday: "short",
     });
+
+  const formatWeekRange = (date) => {
+    const start = new Date(date);
+    start.setDate(start.getDate() - start.getDay() - 6); // 日曜日
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6); // 土曜日
+    const format = (d) =>
+      d.toLocaleDateString("ja-JP", {
+        month: "long",
+        day: "numeric",
+        weekday: "short",
+      });
+
+    return `${format(start)} ～ ${format(end)}`;
+  };
 
   return (
     <div className="water-analysis-container">
@@ -184,12 +219,23 @@ const WaterLogChart = () => {
           </>
         )}
 
+        {mode === "weekly" && (
+          <div className="water-analysis-date">
+            <button onClick={handlePrevWeek}>＜</button>
+            <span style={{ margin: "0 10px" }}>
+              {formatWeekRange(currentDate)}
+            </span>
+            <button onClick={handleNextWeek}>＞</button>
+          </div>
+        )}
+
         <div style={{ width: "100%", height: 400 }} {...swipeHandlers}>
           {chartData.length === 0 ? (
             <p>データがありません</p>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
+                key={mode}
                 data={chartData}
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 barSize={10}
