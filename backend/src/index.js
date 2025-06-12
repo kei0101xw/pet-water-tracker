@@ -6,6 +6,7 @@ const authRoute = require("./routes/auth");
 const userRoute = require("./routes/users");
 const waterBowlRoute = require("./routes/waterBowl");
 const waterLogRoute = require("./routes/waterLog");
+const sensorMode = require("./routes/sensorMode");
 const connectDB = require("./config/connect");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
@@ -15,7 +16,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5050",
+    origin: "http://localhost:5050", //または192.168.11.11:5050
     credentials: true,
   })
 );
@@ -27,15 +28,15 @@ app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/water-bowl", waterBowlRoute);
 app.use("/api/v1/water-log", waterLogRoute);
+app.use("/api/v1/sensor-mode", sensorMode);
 
 //データベースと接続
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
-    app.listen(
-      PORT,
-      console.log(`Server is running on http://localhost:${PORT}`)
-    );
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
   } catch (err) {
     console.log(err);
   }
