@@ -8,8 +8,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import "./WaterAnalysis.css";
 import { useSwipeable } from "react-swipeable";
+import "./WaterAnalysis.css";
 
 const WaterLogChart = () => {
   const [rawData, setRawData] = useState([]);
@@ -25,11 +25,31 @@ const WaterLogChart = () => {
     trackTouch: true,
   });
 
+  const getJSTDateString = (date) => {
+    const jst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+    return jst.toISOString().slice(0, 10);
+  };
+
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:4000/api/v1/water-log", {
+        const petId = localStorage.getItem("petId");
+        const baseUrl = "http://localhost:4000/api/v1";
+        let url = "";
+        const jstDate = getJSTDateString(currentDate);
+
+        if (mode === "daily") {
+          console.log(jstDate);
+          url = `${baseUrl}/water-log?date=${jstDate}`;
+        } else {
+          const weekStart = new Date(currentDate);
+          weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+          const weekStr = getJSTDateString(weekStart);
+          url = `${baseUrl}/water-log/week?week=${weekStr}&petId=${petId}`;
+        }
+
+        const res = await fetch(url, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,25 +59,7 @@ const WaterLogChart = () => {
 
         const data = await res.json();
 
-        if (mode === "daily") {
-          const sorted = data.sort(
-            (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-          );
-          setRawData(sorted);
-        } else {
-          const groupedByDate = data.reduce((acc, log) => {
-            const date = log.timestamp.slice(0, 10);
-            acc[date] = (acc[date] || 0) + log.amount;
-            return acc;
-          }, {});
-          const result = Object.entries(groupedByDate).map(
-            ([date, amount]) => ({
-              date,
-              amount,
-            })
-          );
-          setRawData(result);
-        }
+        setRawData(data);
       } catch (err) {
         console.error("ログ取得失敗:", err);
       }
@@ -70,15 +72,15 @@ const WaterLogChart = () => {
     if (!rawData || rawData.length === 0) return;
 
     if (mode === "daily") {
-      const today = currentDate.toISOString().slice(0, 10);
-      const fullDay = Array.from({ length: 24 * 60 }, (_, i) => {
+      const today = getJSTDateString(currentDate);
+      const fullDay = Array.from({ length: 1440 }, (_, i) => {
         const hour = Math.floor(i / 60);
         const minute = i % 60;
         const time = new Date(
           `${today}T${String(hour).padStart(2, "0")}:${String(minute).padStart(
             2,
             "0"
-          )}:00`
+          )}:00+09:00`
         );
         return {
           timestamp: time.toISOString(),
@@ -104,9 +106,7 @@ const WaterLogChart = () => {
 
       const start = timeWindowIndex * 360;
       const end = start + 360;
-      const sliced = filled.slice(start, end);
-
-      setChartData(sliced);
+      setChartData(filled.slice(start, end));
     } else {
       const weeklyData = rawData.map((entry) => ({
         date: new Date(entry.date).toLocaleDateString("ja-JP", {
@@ -116,15 +116,9 @@ const WaterLogChart = () => {
         }),
         amount: entry.amount,
       }));
-
       setChartData(weeklyData);
     }
   }, [rawData, currentDate, timeWindowIndex]);
-
-  useEffect(() => {
-    console.log("rawData:", rawData);
-    console.log("chartData:", chartData);
-  }, [chartData]);
 
   const handlePrevDay = () => {
     setCurrentDate((prev) => new Date(prev.getTime() - 86400000));
