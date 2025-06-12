@@ -27,7 +27,7 @@ const PetConfirm = () => {
   const handleRegister = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:4000/api/v1/pets", {
+      const res = await fetch(`${import.meta.env.VITE_TEST_URL}/api/v1/pets`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

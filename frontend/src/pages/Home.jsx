@@ -30,6 +30,7 @@ const Home = () => {
         );
         setWaterLevel(res.data.waterLevel);
         setMaxWaterLevel(res.data.maxWaterLevel);
+        setError(null);
       } catch (err) {
         setError(err.response?.data || "データの取得に失敗しました");
       } finally {
@@ -37,7 +38,11 @@ const Home = () => {
       }
     };
 
-    fetchWaterBowl();
+    fetchWaterBowl(); // 初回実行
+
+    const intervalId = setInterval(fetchWaterBowl, 3000); // 3秒ごとに取得
+
+    return () => clearInterval(intervalId); // クリーンアップ
   }, []);
 
   return (

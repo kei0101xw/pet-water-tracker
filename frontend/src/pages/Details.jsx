@@ -8,12 +8,15 @@ const Details = () => {
     const fetchPet = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:4000/api/v1/pets/mine", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_TEST_URL}/api/v1/pets/mine`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: "include",
+          }
+        );
 
         if (!res.ok) {
           throw new Error("ペット情報の取得に失敗しました");

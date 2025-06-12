@@ -28,15 +28,18 @@ const PetEditPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:4000/api/v1/pets/mine", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include", // クッキー送信のために必要
-        body: JSON.stringify(updatedPet),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_TEST_URL}/api/v1/pets/mine`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include", // クッキー送信のために必要
+          body: JSON.stringify(updatedPet),
+        }
+      );
 
       const data = await res.json();
 

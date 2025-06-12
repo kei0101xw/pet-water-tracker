@@ -23,7 +23,7 @@ const UserEditPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:4000/api/v1/users", {
+      const res = await fetch(`${import.meta.env.VITE_TEST_URL}/api/v1/users`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
