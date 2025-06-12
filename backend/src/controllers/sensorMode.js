@@ -6,7 +6,11 @@ const setSensorMode = async (req, res) => {
     const { mode } = req.body;
 
     //日常の分析モード、お皿や最大値の登録モード、オフの３種類がある
-    if (!["normal", "register", "off"].includes(mode)) {
+    if (
+      !["normal", "register-bowl", "register-max-water-level", "off"].includes(
+        mode
+      )
+    ) {
       return res.status(400).json({ message: "無効なモードです" });
     }
 
