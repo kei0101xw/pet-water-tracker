@@ -62,6 +62,58 @@ const createWaterLog = async (req, res) => {
   }
 };
 
+const getLogsByDate = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const petId = req.cookies.petId;
+
+    if (!petId) {
+      return res.status(400).json({ message: "petIdがクッキーに存在しません" });
+    }
+
+    const { date } = req.query; // 例: "2025-06-08"
+    if (!date) {
+      return res
+        .status(400)
+        .json({ message: "日付が指定されていません（例: ?date=2025-06-08）" });
+    }
+
+    const JST_OFFSET = 9 * 60 * 60000;
+    const targetDate = new Date(date);
+    if (isNaN(targetDate.getTime())) {
+      return res
+        .status(400)
+        .json({ message: "無効な日付形式です（YYYY-MM-DD）" });
+    }
+
+    // JST 0:00:00 → UTCに変換
+    const startJST = new Date(targetDate);
+    startJST.setHours(0, 0, 0, 0);
+    const startUTC = new Date(startJST.getTime() - JST_OFFSET);
+
+    const endJST = new Date(targetDate);
+    endJST.setHours(23, 59, 59, 999);
+    const endUTC = new Date(endJST.getTime() - JST_OFFSET);
+
+    const logs = await WaterLog.find({
+      userId,
+      petId,
+      timestamp: {
+        $gte: startUTC,
+        $lte: endUTC,
+      },
+    }).sort({ timestamp: 1 });
+
+    res.status(200).json(logs);
+  } catch (err) {
+    res.status(500).json({
+      message: "指定日の水分ログの取得に失敗しました",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   createWaterLog,
+  getLogsByDate,
 };
