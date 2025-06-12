@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5050", //または192.168.11.11:5050
+    origin: "http://localhost:5050", //または172.20.10.9:5050
     credentials: true,
   })
 );

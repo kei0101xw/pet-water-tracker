@@ -60,16 +60,16 @@ const loginUser = async (req, res) => {
     if (pet) {
       res.cookie("petId", pet._id.toString(), {
         httpOnly: true,
-        secure: true,
-        sameSite: "Strict",
+        secure: false, // 開発中はfalse
+        sameSite: "Lax", //もとはStrict
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
     }
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
+      secure: false, // 開発中はfalse
+      sameSite: "Lax", //もとはStrict
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -90,13 +90,13 @@ const loginUser = async (req, res) => {
 const logoutUser = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: true,
-    sameSite: "Strict",
+    secure: false, // 開発中はfalse
+    sameSite: "Lax", //もとはStrict
   });
   res.clearCookie("petId", {
     httpOnly: true,
-    secure: true,
-    sameSite: "Strict",
+    secure: false, // 開発中はfalse
+    sameSite: "Lax", //もとはStrict
   });
   return res.status(200).json({ message: "ログアウトしました" });
 };

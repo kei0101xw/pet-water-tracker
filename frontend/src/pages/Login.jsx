@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/v1/auth/login",
+        `${import.meta.env.VITE_TEST_URL}/api/v1/auth/login`,
         { email, password },
         { withCredentials: true } //これでクッキーを送信
       );
@@ -24,6 +24,8 @@ const Login = () => {
       navigate("/");
     } catch (err) {
       setMessage("ログイン失敗: " + err.response?.data || "エラー");
+      console.log(err);
+      console.log(import.meta.env.VITE_TEST_URL);
     }
   };
 

@@ -12,14 +12,17 @@ const UserConfirm = () => {
 
   const handleRegister = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/v1/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(user),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_TEST_URL}/api/v1/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(user),
+        }
+      );
 
       if (!res.ok) {
         throw new Error("登録に失敗しました");
