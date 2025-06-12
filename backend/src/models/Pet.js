@@ -16,7 +16,6 @@ const PetSchema = new mongoose.Schema({
     enum: ["dog", "cat"],
     required: true,
   },
-  //犬種猫種
   breed: {
     type: String,
     trim: true,
@@ -27,6 +26,12 @@ const PetSchema = new mongoose.Schema({
   },
   birthdate: {
     type: Date,
+  },
+  recommendedWaterMl: {
+    type: Number,
+  },
+  dangerousWaterMl: {
+    type: Number,
   },
 });
 
