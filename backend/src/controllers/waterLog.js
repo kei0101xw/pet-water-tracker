@@ -2,6 +2,7 @@ const WaterLog = require("../models/WaterLog");
 const WaterBowl = require("../models/WaterBowl");
 const Pet = require("../models/Pet");
 const { sendLowWaterLevelAlert } = require("../utils/mailer");
+const User = require("../models/User");
 
 const DRINK_THRESHOLD = 2; //g 減
 const REFILL_THRESHOLD = 5; //g 増
