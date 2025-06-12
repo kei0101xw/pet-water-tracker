@@ -12,7 +12,12 @@ const UserRegister = () => {
     password: "",
   });
 
-  // 戻ってきたときに state から値を復元
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
   useEffect(() => {
     if (location.state?.user) {
       setUser(location.state.user);
@@ -25,11 +30,35 @@ const UserRegister = () => {
       ...prevUser,
       [name]: value,
     }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!user.username.trim()) {
+      newErrors.username = "ユーザー名を入力してください。";
+    }
+
+    if (!user.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      newErrors.email = "正しいメールアドレスを入力してください。";
+    }
+
+    if (user.password.length < 6) {
+      newErrors.password = "パスワードは6文字以上で入力してください。";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // ここでAPIに送信するなどの処理を追加予定
+    if (!validate()) return;
     navigate("/user/confirm", { state: { user } });
   };
 
@@ -46,7 +75,9 @@ const UserRegister = () => {
             value={user.username}
             onChange={handleChange}
           />
+          {errors.username && <p className="error">{errors.username}</p>}
         </label>
+
         <label>
           <div className="login-input-label">メールアドレス:</div>
           <input
@@ -56,7 +87,9 @@ const UserRegister = () => {
             value={user.email}
             onChange={handleChange}
           />
+          {errors.email && <p className="error">{errors.email}</p>}
         </label>
+
         <label>
           <div className="login-input-label">パスワード:</div>
           <input
@@ -66,7 +99,9 @@ const UserRegister = () => {
             value={user.password}
             onChange={handleChange}
           />
+          {errors.password && <p className="error">{errors.password}</p>}
         </label>
+
         <div className="register-button-group">
           <button type="submit" className="user-setting-save">
             確認画面へ
