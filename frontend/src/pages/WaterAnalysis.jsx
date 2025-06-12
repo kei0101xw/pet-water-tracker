@@ -156,7 +156,7 @@ const WaterLogChart = () => {
 
   const formatWeekRange = (date) => {
     const start = new Date(date);
-    start.setDate(start.getDate() - start.getDay()); // 日曜日
+    start.setDate(start.getDate() - start.getDay() - 6); // 日曜日
     const end = new Date(start);
     end.setDate(start.getDate() + 6); // 土曜日
     const format = (d) =>
