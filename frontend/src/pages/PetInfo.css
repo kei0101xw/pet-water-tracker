@@ -1,46 +1,49 @@
+/* ページ全体の調整：固定ヘッダーを考慮 */
 .petinfo-container {
   max-width: 400px;
-  margin: 20px auto;
+  margin: 100px auto 20px; /* 上部に余白を持たせてヘッダーと重ならないように */
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
   background-color: #fafafa;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
 }
 
+/* タイトル */
 .petinfo-title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 16px;
   color: #333;
+  text-align: center;
 }
 
+/* 状態表示 */
 .loading,
 .error,
 .noPet,
 .message {
   text-align: center;
   margin-top: 40px;
+  font-size: 16px;
 }
 
+/* 色調整 */
 .loading {
-  font-size: 18px;
   color: #555;
 }
-
 .error {
   color: #cc0000;
   font-weight: bold;
 }
-
 .noPet {
   color: #666;
   font-style: italic;
 }
-
 .message {
-  color: #2d7a2d;
+  color: rgb(54, 145, 220);
   font-weight: bold;
 }
 
@@ -49,7 +52,8 @@
   margin-top: 20px;
   display: flex;
   gap: 12px;
-  justify-content: flex-start;
+  justify-content: center; /* ← 中央揃え */
+  flex-wrap: wrap;
 }
 
 /* ボタン共通 */
@@ -74,11 +78,11 @@
 
 /* 修正ボタン */
 .btn-edit {
-  background-color: #4caf50;
+  background-color: rgb(54, 145, 220);
   color: white;
 }
 .btn-edit:hover {
-  background-color: #3e8e41;
+  background-color: rgb(40, 120, 190);
 }
 
 /* 削除ボタン */
@@ -88,4 +92,23 @@
 }
 .btn-delete:hover {
   background-color: #b71c1c;
+}
+
+/* スマホ対応 */
+@media (max-width: 480px) {
+  .petinfo-container {
+    margin: 90px 10px 20px;
+    padding: 16px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: center; /* 中央に揃える */
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 200px; /* 幅を制限して中央に整える */
+    text-align: center;
+  }
 }

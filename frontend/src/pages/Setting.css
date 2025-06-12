@@ -1,32 +1,53 @@
 .setting-container {
-  padding: 2rem;
+  padding: 120px 1rem 2rem; /* ヘッダー対策 + 下余白 */
   background-color: #f9f9f9;
+  min-height: 100vh;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .setting-title {
   font-size: 2rem;
+  font-weight: bold;
   margin-bottom: 2rem;
+  color: #333;
 }
 
 .setting-buttons {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: center;
+  max-width: 400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .setting-button {
   padding: 0.75rem 2rem;
-  font-size: 1.2rem;
-  background-color: #4caf50;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background-color: rgb(54 145 220);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.1s ease-in-out;
+  width: 100%;
+  max-width: 100%;
 }
 
 .setting-button:hover {
-  background-color: #45a049;
+  background-color: rgb(54 145 220);
+  transform: scale(1.02);
+}
+
+@media (max-width: 480px) {
+  .setting-title {
+    font-size: 1.5rem;
+  }
+
+  .setting-button {
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+  }
 }
