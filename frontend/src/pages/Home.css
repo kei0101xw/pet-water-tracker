@@ -72,6 +72,13 @@
   font-weight: 600;
 }
 
+.alert-danger {
+  margin-top: 20px;
+  background-color: #ff8181;
+  border-radius: 20px;
+  padding: 10px;
+}
+
 .status-box {
   font-size: 18px;
 }
