@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 
 const sendLowWaterLevelAlert = async (toEmail, username) => {
   await transporter.sendMail({
-    from: `"Water Monitor" <${process.env.MAIL_USER}>`,
+    from: `"Mizu Care" <${process.env.MAIL_USER}>`,
     to: toEmail,
     subject: "【水が少ないです】",
     text: `${username}さん、ペットの水がほとんどなくなっています。早めの給水をおすすめします。`,
