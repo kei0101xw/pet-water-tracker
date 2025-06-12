@@ -84,10 +84,7 @@ const WaterLogChart = () => {
         );
         return {
           timestamp: time.toISOString(),
-          time: time.toLocaleTimeString("ja-JP", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+          time: `${time.getHours()}時`,
           amount: 0,
         };
       });
