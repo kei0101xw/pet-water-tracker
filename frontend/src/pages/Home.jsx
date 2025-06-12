@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../pages/Home.css";
 import Circle from "../components/Circle";
@@ -7,6 +6,7 @@ import Circle from "../components/Circle";
 const Home = () => {
   const [waterLevel, setWaterLevel] = useState(null);
   const [maxWaterLevel, setMaxWaterLevel] = useState(null);
+  const [petName, setPetName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -16,9 +16,10 @@ const Home = () => {
       : 0;
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
     const fetchWaterBowl = async () => {
       try {
-        const token = localStorage.getItem("token");
         const res = await axios.get(
           `${import.meta.env.VITE_TEST_URL}/api/v1/water-bowl`,
           {
@@ -38,11 +39,29 @@ const Home = () => {
       }
     };
 
-    fetchWaterBowl(); // 初回実行
+    const fetchPetName = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_TEST_URL}/api/v1/pets/mine`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+        setPetName(res.data.name);
+      } catch (err) {
+        console.error("ペット情報の取得に失敗しました", err);
+      }
+    };
 
-    const intervalId = setInterval(fetchWaterBowl, 3000); // 3秒ごとに取得
+    fetchWaterBowl();
+    fetchPetName();
 
-    return () => clearInterval(intervalId); // クリーンアップ
+    const intervalId = setInterval(fetchWaterBowl, 3000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -50,11 +69,16 @@ const Home = () => {
       <div className="status-box">
         {loading && <p className="loading">読み込み中...</p>}
         {error && <p className="error">{error}</p>}
+
         <p className="home-title">お皿の残りの水量</p>
         <div className="circle-wrapper">
           <Circle score={waterPercentage} />
         </div>
-        <p className="home-title">マロンちゃんの飲水状況</p>
+
+        <p className="home-title">
+          {petName ? `${petName}ちゃんの飲水状況` : "ペットの飲水状況"}
+        </p>
+
         <div className="menu-now">
           {!loading && !error && (
             <>
