@@ -14,12 +14,15 @@ const Home = () => {
     const fetchWaterBowl = async () => {
       try {
         const token = localStorage.getItem("token"); // トークンを localStorage から取得
-        const res = await axios.get("http://localhost:4000/api/v1/water-bowl", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_TEST_URL}/api/v1/water-bowl`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
         setWaterLevel(res.data.waterLevel);
       } catch (err) {
         setError(err.response?.data || "データの取得に失敗しました");
@@ -36,20 +39,21 @@ const Home = () => {
       <div className="status-box">
         {loading && <p className="loading">読み込み中...</p>}
         {error && <p className="error">{error}</p>}
-        <p className="home-title">マロンちゃんの飲水状況</p>
+        <p className="home-title">お皿の残りの水量</p>
         <div className="circle-wrapper">
           <Circle score={waterPercentage} />
         </div>
+        <p className="home-title">マロンちゃんの飲水状況</p>
         <div className="menu-now">
           {!loading && !error && (
             <>
               <div className="today-sum-container">
                 <div className="today-sum">今日の合計：</div>
-                <div className="today-sum-value">200g</div>
+                <div className="today-sum-value">145.3g (-204.7g)</div>
               </div>
 
               <div className="remaining-amount-container">
-                <div className="remaining-amount">残りの水の残量：</div>
+                <div className="remaining-amount">お皿の水の残量：</div>
                 <div className="remaining-amount-value">
                   {waterLevel ?? "不明"}g
                 </div>
