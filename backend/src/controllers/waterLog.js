@@ -213,8 +213,96 @@ const getWeeklyLogs = async (req, res) => {
   }
 };
 
+const getDailyTotal = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const petId = req.cookies.petId;
+
+    if (!petId) {
+      return res.status(400).json({ message: "petIdがクッキーに存在しません" });
+    }
+
+    const { date } = req.query; // 例: "2025-06-13"
+    if (!date) {
+      return res
+        .status(400)
+        .json({ message: "日付が指定されていません（例: ?date=2025-06-13）" });
+    }
+
+    const JST_OFFSET = 9 * 60 * 60000;
+    const targetDate = new Date(date);
+    if (isNaN(targetDate.getTime())) {
+      return res
+        .status(400)
+        .json({ message: "無効な日付形式です（YYYY-MM-DD）" });
+    }
+
+    const startJST = new Date(targetDate);
+    startJST.setHours(0, 0, 0, 0);
+    const endJST = new Date(targetDate);
+    endJST.setHours(23, 59, 59, 999);
+
+    const startUTC = new Date(startJST.getTime() - JST_OFFSET);
+    const endUTC = new Date(endJST.getTime() - JST_OFFSET);
+
+    const logs = await WaterLog.find({
+      userId,
+      petId,
+      timestamp: { $gte: startUTC, $lte: endUTC },
+    });
+
+    const totalAmount = logs.reduce((sum, log) => sum + log.amount, 0);
+
+    res.status(200).json({ date, total: totalAmount });
+  } catch (err) {
+    res.status(500).json({
+      message: "日ごとの合計取得に失敗しました",
+      error: err.message,
+    });
+  }
+};
+
+const deleteTodayLogs = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const petId = req.cookies.petId;
+
+    if (!petId) {
+      return res.status(400).json({ message: "petIdがクッキーに存在しません" });
+    }
+
+    const JST_OFFSET = 9 * 60 * 60000;
+    const now = new Date(Date.now() + JST_OFFSET);
+    now.setHours(0, 0, 0, 0);
+    const startUTC = new Date(now.getTime() - JST_OFFSET);
+
+    const end = new Date(now);
+    end.setHours(23, 59, 59, 999);
+    const endUTC = new Date(end.getTime() - JST_OFFSET);
+
+    const result = await WaterLog.deleteMany({
+      userId,
+      petId,
+      timestamp: { $gte: startUTC, $lte: endUTC },
+    });
+
+    res.status(200).json({
+      message: "本日のログを削除しました",
+      deletedCount: result.deletedCount,
+    });
+  } catch (err) {
+    console.error("本日ログ削除エラー:", err);
+    res.status(500).json({
+      message: "本日のログ削除に失敗しました",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   createWaterLog,
   getLogsByDate,
   getWeeklyLogs,
+  getDailyTotal,
+  deleteTodayLogs,
 };
