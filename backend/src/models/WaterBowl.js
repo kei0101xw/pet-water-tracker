@@ -22,6 +22,10 @@ const WaterBowlSchema = new mongoose.Schema({
     type: Number,
     default: null,
   },
+  maxWaterLevel: {
+    type: Number,
+    default: null,
+  },
   lastWeight: {
     type: Number,
     default: null,
