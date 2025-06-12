@@ -8,7 +8,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useSwipeable } from "react-swipeable";
 import "./WaterAnalysis.css";
 
 const WaterLogChart = () => {
@@ -16,14 +15,6 @@ const WaterLogChart = () => {
   const [chartData, setChartData] = useState([]);
   const [mode, setMode] = useState("daily");
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [timeWindowIndex, setTimeWindowIndex] = useState(0);
-
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => setTimeWindowIndex((prev) => Math.min(prev + 1, 3)),
-    onSwipedRight: () => setTimeWindowIndex((prev) => Math.max(prev - 1, 0)),
-    preventScrollOnSwipe: true,
-    trackTouch: true,
-  });
 
   const getJSTDateString = (date) => {
     const jst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
@@ -40,7 +31,6 @@ const WaterLogChart = () => {
         const jstDate = getJSTDateString(currentDate);
 
         if (mode === "daily") {
-          console.log(jstDate);
           url = `${baseUrl}/water-log?date=${jstDate}`;
         } else {
           const weekStart = new Date(currentDate);
@@ -58,7 +48,6 @@ const WaterLogChart = () => {
         });
 
         const data = await res.json();
-
         setRawData(data);
       } catch (err) {
         console.error("ログ取得失敗:", err);
@@ -84,7 +73,10 @@ const WaterLogChart = () => {
         );
         return {
           timestamp: time.toISOString(),
-          time: `${time.getHours()}時`,
+          time: `${String(hour).padStart(2, "0")}:${String(minute).padStart(
+            2,
+            "0"
+          )}`,
           amount: 0,
         };
       });
@@ -101,9 +93,7 @@ const WaterLogChart = () => {
         return match ? { ...entry, amount: match.amount } : entry;
       });
 
-      const start = timeWindowIndex * 360;
-      const end = start + 360;
-      setChartData(filled.slice(start, end));
+      setChartData(filled);
     } else {
       const weeklyData = Object.entries(rawData).map(([dateStr, amount]) => ({
         date: new Date(dateStr).toLocaleDateString("ja-JP", {
@@ -115,7 +105,7 @@ const WaterLogChart = () => {
       }));
       setChartData(weeklyData);
     }
-  }, [rawData, currentDate, timeWindowIndex]);
+  }, [rawData, currentDate]);
 
   useEffect(() => {
     setChartData([]);
@@ -123,12 +113,10 @@ const WaterLogChart = () => {
 
   const handlePrevDay = () => {
     setCurrentDate((prev) => new Date(prev.getTime() - 86400000));
-    setTimeWindowIndex(0);
   };
 
   const handleNextDay = () => {
     setCurrentDate((prev) => new Date(prev.getTime() + 86400000));
-    setTimeWindowIndex(0);
   };
 
   const handlePrevWeek = () => {
@@ -193,27 +181,11 @@ const WaterLogChart = () => {
         </div>
 
         {mode === "daily" && (
-          <>
-            <div className="water-analysis-date">
-              <button onClick={handlePrevDay}>＜</button>
-              <span style={{ margin: "0 10px" }}>
-                {formatDate(currentDate)}
-              </span>
-              <button onClick={handleNextDay}>＞</button>
-            </div>
-            <div
-              style={{
-                textAlign: "center",
-                marginTop: "8px",
-                marginBottom: "12px",
-                fontWeight: "bold",
-              }}
-            >
-              {`${timeWindowIndex * 6}:00 〜 ${
-                (timeWindowIndex + 1) * 6 - 1
-              }:59`}
-            </div>
-          </>
+          <div className="water-analysis-date">
+            <button onClick={handlePrevDay}>＜</button>
+            <span style={{ margin: "0 10px" }}>{formatDate(currentDate)}</span>
+            <button onClick={handleNextDay}>＞</button>
+          </div>
         )}
 
         {mode === "weekly" && (
@@ -226,7 +198,7 @@ const WaterLogChart = () => {
           </div>
         )}
 
-        <div style={{ width: "100%", height: 400 }} {...swipeHandlers}>
+        <div style={{ width: "100%", height: 400 }}>
           {chartData.length === 0 ? (
             <p>データがありません</p>
           ) : (
@@ -242,7 +214,7 @@ const WaterLogChart = () => {
                   dataKey={mode === "daily" ? "time" : "date"}
                   angle={-45}
                   textAnchor="end"
-                  interval={mode === "daily" ? 59 : 0}
+                  interval={mode === "daily" ? 59 : 0} // 毎時1回表示
                   height={80}
                 />
                 <YAxis
