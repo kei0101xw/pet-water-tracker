@@ -1,16 +1,16 @@
 const WaterBowl = require("../models/WaterBowl");
 
-// 水入れの登録
+// 水入れの登録（センサ側）
 const createWaterBowl = async (req, res) => {
   try {
-    const existingBowl = await WaterBowl.findOne({ userId: req.user.id });
+    const existingBowl = await WaterBowl.findOne({ userId: req.user.userId });
     if (existingBowl) {
       return res.status(400).json("既に水入れ皿が登録されています");
     }
 
     const newWaterBowl = await WaterBowl.create({
       ...req.body,
-      userId: req.user.id,
+      userId: req.user.userId,
     });
 
     res.status(200).json(newWaterBowl);
@@ -33,16 +33,32 @@ const getWaterBowl = async (req, res) => {
   }
 };
 
-// 水入れの重量の更新
+// 水入れの重量の更新(センサ側)
 const updateBowlWeight = async (req, res) => {
   try {
-    const bowl = await WaterBowl.findOne({ userId: req.user.id });
+    const bowl = await WaterBowl.findOne({ userId: req.user.userId });
     if (!bowl) return res.status(404).json("水入れが見つかりません");
 
     bowl.bowlWeight = req.body.bowlWeight;
     await bowl.save();
 
     res.status(200).json("水入れの重量が更新されました");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json("サーバーエラーが発生しました");
+  }
+};
+
+// 最大量の更新（センサ側）
+const updateMaxWaterLevel = async (req, res) => {
+  try {
+    const bowl = await WaterBowl.findOne({ userId: req.user.userId });
+    if (!bowl) return res.status(404).json("水入れが見つかりません");
+
+    bowl.maxWaterLevel = req.body.maxWaterLevel;
+    await bowl.save();
+
+    res.status(200).json("水量の最大値が更新されました");
   } catch (err) {
     console.error(err);
     res.status(500).json("サーバーエラーが発生しました");
@@ -84,6 +100,7 @@ module.exports = {
   createWaterBowl,
   getWaterBowl,
   updateBowlWeight,
+  updateMaxWaterLevel,
   updateWaterLevel,
   deleteBowl,
 };

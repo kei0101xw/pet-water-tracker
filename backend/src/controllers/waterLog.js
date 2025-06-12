@@ -1,6 +1,7 @@
 const WaterLog = require("../models/WaterLog");
 const WaterBowl = require("../models/WaterBowl");
 const Pet = require("../models/Pet");
+const { sendLowWaterLevelAlert } = require("../utils/mailer");
 
 const DRINK_THRESHOLD = 2; //g 減
 const REFILL_THRESHOLD = 5; //g 増
@@ -27,6 +28,19 @@ const createWaterLog = async (req, res) => {
     //現在の水入れ皿の情報を更新
     waterBowl.allWeight = currentWeight;
     waterBowl.waterLevel = currentWeight - waterBowl.bowlWeight;
+
+    // メール送信
+    if (
+      waterBowl.maxWaterLevel &&
+      waterBowl.waterLevel !== null &&
+      waterBowl.waterLevel <= waterBowl.maxWaterLevel / 10
+    ) {
+      const user = await User.findById(userId);
+      if (user) {
+        await sendLowWaterLevelAlert(user.email, user.username);
+        console.log("水位低下の通知メールを送信しました");
+      }
+    }
 
     //皿が存在しない
     if (currentWeight < waterBowl.bowlWeight + 10) {

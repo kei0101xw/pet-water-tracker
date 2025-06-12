@@ -9,7 +9,7 @@ const SensorModeSchema = new mongoose.Schema({
   },
   mode: {
     type: String,
-    enum: ["normal", "register", "off"],
+    enum: ["normal", "register-bowl", "register-max-water-level", "off"],
     default: "off",
   },
   updatedAt: { type: Date, default: Date.now },
