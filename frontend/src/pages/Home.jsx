@@ -6,14 +6,19 @@ import Circle from "../components/Circle";
 
 const Home = () => {
   const [waterLevel, setWaterLevel] = useState(null);
+  const [maxWaterLevel, setMaxWaterLevel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const waterPercentage = 70;
+
+  const waterPercentage =
+    waterLevel !== null && maxWaterLevel
+      ? Math.min(100, Math.round((waterLevel / maxWaterLevel) * 100))
+      : 0;
 
   useEffect(() => {
     const fetchWaterBowl = async () => {
       try {
-        const token = localStorage.getItem("token"); // トークンを localStorage から取得
+        const token = localStorage.getItem("token");
         const res = await axios.get(
           `${import.meta.env.VITE_TEST_URL}/api/v1/water-bowl`,
           {
@@ -24,6 +29,7 @@ const Home = () => {
           }
         );
         setWaterLevel(res.data.waterLevel);
+        setMaxWaterLevel(res.data.maxWaterLevel);
       } catch (err) {
         setError(err.response?.data || "データの取得に失敗しました");
       } finally {
@@ -55,7 +61,7 @@ const Home = () => {
               <div className="remaining-amount-container">
                 <div className="remaining-amount">お皿の水の残量：</div>
                 <div className="remaining-amount-value">
-                  {waterLevel ?? "不明"}g
+                  {waterLevel ?? "不明"}g / {maxWaterLevel ?? "不明"}g
                 </div>
               </div>
             </>
