@@ -120,6 +120,10 @@ const WaterLogChart = () => {
     }
   }, [rawData, currentDate, timeWindowIndex]);
 
+  useEffect(() => {
+    setChartData([]);
+  }, [mode]);
+
   const handlePrevDay = () => {
     setCurrentDate((prev) => new Date(prev.getTime() - 86400000));
     setTimeWindowIndex(0);
@@ -231,6 +235,7 @@ const WaterLogChart = () => {
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
+                key={mode}
                 data={chartData}
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 barSize={10}
