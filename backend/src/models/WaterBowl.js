@@ -34,6 +34,10 @@ const WaterBowlSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  alertSent: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("WaterBowl", WaterBowlSchema);

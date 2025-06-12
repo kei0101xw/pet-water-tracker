@@ -26,24 +26,33 @@ const createWaterLog = async (req, res) => {
     const currentWeight = Number(result);
     const currentTime = new Date();
 
-    //現在の水入れ皿の情報を更新
+    // 現在の水入れ皿の情報を更新
     waterBowl.allWeight = currentWeight;
     waterBowl.waterLevel = currentWeight - waterBowl.bowlWeight;
 
-    // メール送信
+    // メール通知処理（25%以下、かつ未通知の場合のみ送信）
     if (
       waterBowl.maxWaterLevel &&
       waterBowl.waterLevel !== null &&
-      waterBowl.waterLevel <= waterBowl.maxWaterLevel / 10
+      waterBowl.waterLevel <= waterBowl.maxWaterLevel / 4
     ) {
-      const user = await User.findById(userId);
-      if (user) {
-        await sendLowWaterLevelAlert(user.email, user.username);
-        console.log("水位低下の通知メールを送信しました");
+      if (!waterBowl.alertSent) {
+        const user = await User.findById(userId);
+        if (user) {
+          await sendLowWaterLevelAlert(user.email, user.username);
+          waterBowl.alertSent = true;
+          console.log("水位低下の通知メールを送信しました");
+        }
       }
+    } else {
+      // 水位が回復した場合、通知フラグをリセット
+      if (waterBowl.alertSent) {
+        console.log("水位が回復したため、通知フラグをリセットします");
+      }
+      waterBowl.alertSent = false;
     }
 
-    //皿が存在しない
+    // 皿が存在しない（空の可能性がある）
     if (currentWeight < waterBowl.bowlWeight + 10) {
       await waterBowl.save();
       return res.status(200).json({ status: "皿が存在しない" });
