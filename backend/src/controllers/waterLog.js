@@ -113,7 +113,82 @@ const getLogsByDate = async (req, res) => {
   }
 };
 
+const getWeeklyLogs = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const petId = req.cookies.petId;
+    if (!petId) {
+      return res.status(400).json({ message: "petIdがクッキーに存在しません" });
+    }
+
+    const JST_OFFSET = 9 * 60 * 60000;
+    const queryDateStr = req.query.week;
+    let baseJST;
+
+    if (queryDateStr) {
+      // クエリの文字列を分解して JST の日付を作る（UTCで 00:00:00 → JST 09:00:00）
+      const [year, month, day] = queryDateStr.split("-").map(Number);
+      if (!year || !month || !day) {
+        return res
+          .status(400)
+          .json({ message: "無効な日付形式です（YYYY-MM-DD）" });
+      }
+      const utcMidnight = new Date(Date.UTC(year, month - 1, day)); // UTCの0時
+      baseJST = new Date(utcMidnight.getTime() + JST_OFFSET);
+    } else {
+      baseJST = new Date(Date.now() + JST_OFFSET); // 現在のJST日時
+    }
+
+    // JST基準で週の月曜〜日曜の範囲を求める
+    const dayOfWeek = baseJST.getDay(); // 0:日〜6:土
+    const daysToMonday = (dayOfWeek + 6) % 7; // 月曜まで戻す
+    const mondayJST = new Date(baseJST);
+    mondayJST.setDate(baseJST.getDate() - daysToMonday);
+    mondayJST.setHours(0, 0, 0, 0);
+
+    const sundayJST = new Date(mondayJST);
+    sundayJST.setDate(mondayJST.getDate() + 6);
+    sundayJST.setHours(23, 59, 59, 999);
+
+    const startUTC = new Date(mondayJST.getTime() - JST_OFFSET);
+    const endUTC = new Date(sundayJST.getTime() - JST_OFFSET);
+
+    const logs = await WaterLog.find({
+      userId,
+      petId,
+      timestamp: { $gte: startUTC, $lte: endUTC },
+    });
+
+    // 初期化：月〜日までの全日付を 0 にする
+    const result = {};
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(mondayJST);
+      date.setDate(mondayJST.getDate() + i);
+      const dateStr = date.toISOString().slice(0, 10); // YYYY-MM-DD
+      result[dateStr] = 0;
+    }
+
+    // ログを日付単位で集計（JSTに変換して分類）
+    for (const log of logs) {
+      const jstTime = new Date(log.timestamp.getTime() + JST_OFFSET);
+      const dateStr = jstTime.toISOString().slice(0, 10);
+      if (result[dateStr] !== undefined) {
+        result[dateStr] += log.amount;
+      }
+    }
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("1週間ログ取得エラー:", err);
+    res.status(500).json({
+      message: "1週間の飲水ログ取得に失敗しました",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   createWaterLog,
   getLogsByDate,
+  getWeeklyLogs,
 };
